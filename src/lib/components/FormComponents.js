@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input, Label } from 'reactstrap';
 import Draggable from "react-draggable";
@@ -253,14 +253,19 @@ const TableComponent = ClassAdapter(FormComponents, {
         if (document.getElementsByName("Table_" + this.getName()))
         {
             let tableComp = document.getElementsByName("Table_" + this.getName());
-            for (let i in tableComp) {
+            for (let i in tableComp)
+            {
                 if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i)
                 {
-                    let tdWidth, headerWidth;
+                    let tdWidth, headerWidth, tableContainerWidth;
+
                     if (!document.getElementById("Table_" + this.getName() + "_CellWidth")) {
                         headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
+                        console.log("a." + headerWidth);
                         headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
+                        console.log("b." + headerWidth + "," + parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left")));
                         headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
+                        console.log("c." + headerWidth + "," + parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right")));
 
                         tdWidth = ((headerWidth - (6 * this.getDisplayedFields()) - this.getBrowserScrollbarWidth()) / this.getDisplayedFields()) + "px";
 
@@ -275,13 +280,29 @@ const TableComponent = ClassAdapter(FormComponents, {
                         hiddenHeaderWidth.type = "hidden";
                         hiddenHeaderWidth.value = headerWidth;
                         document.getElementById('root').appendChild(hiddenHeaderWidth);
+
+                        tableContainerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode.parentNode).getPropertyValue("width"));
+
+                        let tableContainerWidthInput = document.createElement("input")
+                        tableContainerWidthInput.id = "TableContainer_" + this.getName() + "_HeaderWidth";
+                        tableContainerWidthInput.type = "hidden";
+                        tableContainerWidthInput.value = tableContainerWidth;
+                        document.getElementById('root').appendChild(tableContainerWidthInput);
+                        console.log("1. tableContainerWidth: " + tableContainerWidth + "," + headerWidth);
                     } else {
                         tdWidth = document.getElementById("Table_" + this.getName() + "_CellWidth").value;
                         headerWidth = document.getElementById("Table_" + this.getName() + "_HeaderWidth").value;
+                        tableContainerWidth = document.getElementById("TableContainer_" + this.getName() + "_HeaderWidth").value;
+                        console.log("2. tableContainerWidth: " + tableContainerWidth + "," + headerWidth);
                     }
-
-                    document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "width:" + headerWidth + "px");
+                    /*
+                    document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "margin-left:" + ((tableContainerWidth - headerWidth) / 2) + "px;margin-right:" + ((tableContainerWidth - headerWidth) / 2) + "; border-right:1px solid #ccc;");
                     document.getElementsByName("TableHeadTR_" + this.getName())[i].setAttribute("style", "width:" + (headerWidth - this.getBrowserScrollbarWidth()) + "px");
+                    document.getElementsByName("Table_" + this.getName())[i].setAttribute("style", "max-width:" + headerWidth + "px");
+                    */
+                    document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "width:" + headerWidth + "px; border-right:1px solid #ccc;");
+                    document.getElementsByName("TableHeadTR_" + this.getName())[i].setAttribute("style", "width:" + (headerWidth - this.getBrowserScrollbarWidth()) + "px");
+                    document.getElementsByName("Table_" + this.getName())[i].setAttribute("style", "max-width:" + headerWidth + "px");
 
                     for (let j in tableComp[i].childNodes) { // thead only, tbody cell width is adjusted after state of API fetch is done
                         for (let k in tableComp[i].childNodes[j].childNodes) {
@@ -346,7 +367,7 @@ const TableComponent = ClassAdapter(FormComponents, {
         }
 
         return (
-            <div className="CollaboratorTable" name={'Table_' + this.getName()} onLoad={this.adjustHeaderStyle(this)}>
+            <div className="CollaboratorTable" name={'Table_' + this.getName()} onLoad={this.adjustHeaderStyle(this)} style={{ align:'center' }}>
                 <div className="thead" name={'TableHead_' + this.getName()}>
                 {
                     <div
