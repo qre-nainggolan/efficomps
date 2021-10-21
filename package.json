@@ -1,6 +1,6 @@
 {
   "name": "efficomps",
-  "version": "0.1.0",
+  "version": "0.1.02",
   "private": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -8,7 +8,7 @@
   "repository": {
       "type": "git",
       "url": "git+https://github.com/qre-nainggolan/efficomp.git"
-  },    
+  },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@testing-library/jest-dom": "^5.14.1",

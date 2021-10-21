@@ -60,24 +60,3 @@
 .CollaboratorTable .tbody .tr:hover {
     background-color: #e7f5ff !important;
 }
-
-.CollaboratorTable .tbody .trHeaderContainer{
-    position:absolute;
-    margin-right:0;
-    margin-left:0;
-    padding:0;
-}
-
-.CollaboratorTable .tbody .trHeader {
-    float:left;
-    background-color:#ccc;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-bottom: 1px solid #ccc;
-}
-
-.CollaboratorTable .tbody .trHeader .tdHeader {
-    float:left;
-    padding: 1.5px 1px 1.5px 1.5px;
-    margin: 1.5px 1px 1.5px 1.5px;
-}

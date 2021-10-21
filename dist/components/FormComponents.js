@@ -11,9 +11,11 @@ require("core-js/modules/es.regexp.exec.js");
 
 require("core-js/modules/es.regexp.to-string.js");
 
+require("core-js/modules/web.dom-collections.iterator.js");
+
 require("core-js/modules/es.parse-int.js");
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
@@ -26,6 +28,10 @@ var _ClassAdapter = _interopRequireDefault(require("./ClassAdapter"));
 require("./CollaboratorComponent.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 const FormComponents = (0, _ClassAdapter.default)(null, {
   __init: function __init() {
@@ -285,79 +291,18 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       return false;
     }
   },
-  getBrowserScrollbarWidth: function getBrowserScrollbarWidth() {
-    return this.browserScrollWidth || 0;
-  },
-  adjustHeaderStyle: function adjustHeaderStyle() {
-    if (document.getElementsByName("Table_" + this.getName())) {
-      let tableComp = document.getElementsByName("Table_" + this.getName());
-
-      for (let i in tableComp) {
-        if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i) {
-          let tdWidth, headerWidth, tableContainerWidth;
-
-          if (!document.getElementById("Table_" + this.getName() + "_CellWidth")) {
-            headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
-            console.log("a." + headerWidth);
-            headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
-            console.log("b." + headerWidth + "," + parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left")));
-            headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
-            console.log("c." + headerWidth + "," + parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right")));
-            tdWidth = (headerWidth - 6 * this.getDisplayedFields() - this.getBrowserScrollbarWidth()) / this.getDisplayedFields() + "px";
-            let hiddenInputContainer = document.createElement("input");
-            hiddenInputContainer.id = "Table_" + this.getName() + "_CellWidth";
-            hiddenInputContainer.type = "hidden";
-            hiddenInputContainer.value = tdWidth;
-            document.getElementById('root').appendChild(hiddenInputContainer);
-            let hiddenHeaderWidth = document.createElement("input");
-            hiddenHeaderWidth.id = "Table_" + this.getName() + "_HeaderWidth";
-            hiddenHeaderWidth.type = "hidden";
-            hiddenHeaderWidth.value = headerWidth;
-            document.getElementById('root').appendChild(hiddenHeaderWidth);
-            tableContainerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode.parentNode).getPropertyValue("width"));
-            let tableContainerWidthInput = document.createElement("input");
-            tableContainerWidthInput.id = "TableContainer_" + this.getName() + "_HeaderWidth";
-            tableContainerWidthInput.type = "hidden";
-            tableContainerWidthInput.value = tableContainerWidth;
-            document.getElementById('root').appendChild(tableContainerWidthInput);
-            console.log("1. tableContainerWidth: " + tableContainerWidth + "," + headerWidth);
-          } else {
-            tdWidth = document.getElementById("Table_" + this.getName() + "_CellWidth").value;
-            headerWidth = document.getElementById("Table_" + this.getName() + "_HeaderWidth").value;
-            tableContainerWidth = document.getElementById("TableContainer_" + this.getName() + "_HeaderWidth").value;
-            console.log("2. tableContainerWidth: " + tableContainerWidth + "," + headerWidth);
-          }
-          /*
-          document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "margin-left:" + ((tableContainerWidth - headerWidth) / 2) + "px;margin-right:" + ((tableContainerWidth - headerWidth) / 2) + "; border-right:1px solid #ccc;");
-          document.getElementsByName("TableHeadTR_" + this.getName())[i].setAttribute("style", "width:" + (headerWidth - this.getBrowserScrollbarWidth()) + "px");
-          document.getElementsByName("Table_" + this.getName())[i].setAttribute("style", "max-width:" + headerWidth + "px");
-          */
-
-
-          document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "width:" + headerWidth + "px; border-right:1px solid #ccc;");
-          document.getElementsByName("TableHeadTR_" + this.getName())[i].setAttribute("style", "width:" + (headerWidth - this.getBrowserScrollbarWidth()) + "px");
-          document.getElementsByName("Table_" + this.getName())[i].setAttribute("style", "max-width:" + headerWidth + "px");
-
-          for (let j in tableComp[i].childNodes) {
-            // thead only, tbody cell width is adjusted after state of API fetch is done
-            for (let k in tableComp[i].childNodes[j].childNodes) {
-              if (tableComp[i].childNodes[j].childNodes[k].childNodes) {
-                for (let l in tableComp[i].childNodes[j].childNodes[k].childNodes) {
-                  if (tableComp[i].childNodes[j].childNodes[k].childNodes[l].className) {
-                    tableComp[i].childNodes[j].childNodes[k].childNodes[l].setAttribute("style", "width:" + tdWidth);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+  setTestNumber: function setTestNumber() {
+    let test = this.checkNumber + 1;
+    console.log(test);
+    return false;
+    this.updateCheckNumber(test);
   },
   renderTable: function renderTable() {
-    if (document.getElementById("BrowserScrollbarWidthHidden")) {
-      this.browserScrollWidth = document.getElementById("BrowserScrollbarWidthHidden").value;
-    } else {
+    const [tableHeaderWidth, setTableHeaderWidth] = (0, _react.useState)(null);
+    const [tableDataCellWidth, setTableDataCellWidth] = (0, _react.useState)(null);
+    const [browserScrollbarWidth, setBrowserScrollbarWidth] = (0, _react.useState)(null);
+
+    if (browserScrollbarWidth === null) {
       let tempTable = document.createElement("div");
       tempTable.className = "CollaboratorTable";
       tempTable.id = "TableTemp_" + this.getName();
@@ -373,7 +318,8 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       while (counter < totalDisplayed) {
         let tempTableTd = document.createElement("div");
         tempTableTd.className = "td";
-        tempTableTr.appendChild(tempTableTd);
+        tempTableTr.appendChild(tempTableTd); // is this append child part going to consume a lot of memory?
+
         counter++;
       }
 
@@ -382,34 +328,59 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       document.getElementById('root').appendChild(tempTable);
       let bodyWidth = window.getComputedStyle(document.getElementsByTagName("body")[0]).getPropertyValue('width');
       let TRWidth = window.getComputedStyle(document.getElementById("TableTempTR_" + this.getName())).getPropertyValue('width');
-      this.browserScrollWidth = parseInt(bodyWidth) - parseInt(TRWidth);
+      console.log("parseInt(bodyWidth): " + parseInt(bodyWidth) + ", parseInt(TRWidth): " + parseInt(TRWidth));
+      setBrowserScrollbarWidth(parseInt(bodyWidth) - parseInt(TRWidth));
       document.getElementById('root').removeChild(tempTable);
-      let hiddenInputContainer = document.createElement("input");
-      hiddenInputContainer.id = "BrowserScrollbarWidthHidden";
-      hiddenInputContainer.type = "hidden";
-      hiddenInputContainer.value = this.browserScrollWidth;
-      document.getElementById('root').appendChild(hiddenInputContainer);
     }
 
+    (0, _react.useEffect)(() => {
+      let headerWidth = 400;
+      let tdWidth = 100;
+
+      if (document.getElementsByName("Table_" + this.getName())) {
+        let tableComp = document.getElementsByName("Table_" + this.getName());
+
+        for (let i in tableComp) {
+          if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i) {
+            if (tableHeaderWidth === null) {
+              headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
+              headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
+              headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
+              tdWidth = (headerWidth - 2.5 * this.getDisplayedFields() - browserScrollbarWidth) / this.getDisplayedFields(); // 4 is total of padding + margin
+            }
+          }
+        }
+      }
+
+      if (tableHeaderWidth === null) {
+        setTableHeaderWidth(headerWidth);
+        setTableDataCellWidth(tdWidth);
+      }
+    }, []);
     return /*#__PURE__*/_react.default.createElement("div", {
       className: "CollaboratorTable",
       name: 'Table_' + this.getName(),
-      onLoad: this.adjustHeaderStyle(this),
       style: {
-        align: 'center'
+        align: 'center',
+        width: tableHeaderWidth === null ? "500px" : tableHeaderWidth + "px"
       }
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "thead",
-      name: 'TableHead_' + this.getName()
+      name: 'TableHead_' + this.getName(),
+      style: {
+        width: tableHeaderWidth === null ? "0px" : tableHeaderWidth + "px",
+        borderRight: "1px solid #ccc"
+      }
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "tr",
       key: '0_' + this.getName(),
-      name: 'TableHeadTR_' + this.getName()
+      name: 'TableHeadTR_' + this.getName(),
+      style: {}
     }, this.getFields().map((mappedData, i) => mappedData.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
       className: "td",
       key: this.getName() + '_' + i,
       style: {
-        width: '10.5%'
+        width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
     }, mappedData.header) : null))), /*#__PURE__*/_react.default.createElement("div", {
       className: "tbody",
@@ -423,7 +394,7 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       className: "td",
       key: this.getName() + '_' + j,
       style: {
-        width: document.getElementById("Table_" + this.getName() + "_CellWidth").value
+        width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
     }, mappedData[mappedData2.name]) : null)))));
   }

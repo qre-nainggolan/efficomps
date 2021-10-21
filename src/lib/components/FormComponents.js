@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input, Label } from 'reactstrap';
 import Draggable from "react-draggable";
@@ -7,7 +7,7 @@ import './CollaboratorComponent.css';
 
 const FormComponents = ClassAdapter(null, {
     __init: function () {
-        for (let i in arguments[0]){
+        for (let i in arguments[0]) {
             this[i] = arguments[0][i];
         }
     },
@@ -101,7 +101,7 @@ const InputGroupComponent = ClassAdapter(InputComponents, {
         return (
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0" style={this.getDirectStyle()}>
                 <Label for="exampleEmail" className="mr-sm-2">{this.getLabel()}</Label>
-                <Input type="text" value={this.getValue()} onChange={this.executeOnChange()} placeholder={this.getPlaceholder()} style={this.getInputDirectStyle()}/>
+                <Input type="text" value={this.getValue()} onChange={this.executeOnChange()} placeholder={this.getPlaceholder()} style={this.getInputDirectStyle()} />
             </FormGroup>
         )
     }
@@ -134,9 +134,7 @@ const NotificationPopup = ClassAdapter(ModalComponents, {
             <Draggable>
                 <Modal isOpen={this.getIsOpen()} toggle={this.executeOnToggle()} name={this.getName()}>
                     <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
-                    <ModalBody>
-                        {this.getBodyHeaderText()}
-                    </ModalBody>
+                    <ModalBody>{this.getBodyHeaderText()}</ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.executeOnToggle()}>Do Something</Button>{' '}
                         <Button color="secondary" onClick={this.executeOnToggle()}>Cancel</Button>
@@ -145,7 +143,7 @@ const NotificationPopup = ClassAdapter(ModalComponents, {
             </Draggable>
         )
     }
-})
+});
 
 const FormModal = ClassAdapter(ModalComponents, {
     renderComponent: function () {
@@ -162,8 +160,8 @@ const FormModal = ClassAdapter(ModalComponents, {
 
 const FormModalWrapperClass = ClassAdapter(ModalComponents, {
     getChildren: function () {
-        return this.children || (<div></div>);
-    },
+        return this.children || (<div></div>); 
+    }, 
     renderComponent: function () {
         return (
             <Draggable>
@@ -221,8 +219,10 @@ const TableComponent = ClassAdapter(FormComponents, {
         let fields = this.getFields();
         let counter = 0;
         let totalDisplayed = 0;
-        while (counter < fields.length) {
-            if (fields[counter].showHeader) {
+        while (counter < fields.length)
+        {
+            if (fields[counter].showHeader)
+            {
                 totalDisplayed++;
             }
             counter++;
@@ -230,7 +230,6 @@ const TableComponent = ClassAdapter(FormComponents, {
         return totalDisplayed;
     },
     executeOnDoubleClick: function (e) {
-
         if (this.doubleClickEvent) {
             let fields = this.getFields();
             let counter = 0;
@@ -243,90 +242,21 @@ const TableComponent = ClassAdapter(FormComponents, {
         } else {
             return false;
         }
-
     },
-    getBrowserScrollbarWidth: function () {
-        return this.browserScrollWidth || 0;
-    },
-    adjustHeaderStyle: function () 
+    setTestNumber: function ()
     {
-        if (document.getElementsByName("Table_" + this.getName()))
-        {
-            let tableComp = document.getElementsByName("Table_" + this.getName());
-            for (let i in tableComp)
-            {
-                if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i)
-                {
-                    let tdWidth, headerWidth, tableContainerWidth;
-
-                    if (!document.getElementById("Table_" + this.getName() + "_CellWidth")) {
-                        headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
-                        console.log("a." + headerWidth);
-                        headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
-                        console.log("b." + headerWidth + "," + parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left")));
-                        headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
-                        console.log("c." + headerWidth + "," + parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right")));
-
-                        tdWidth = ((headerWidth - (6 * this.getDisplayedFields()) - this.getBrowserScrollbarWidth()) / this.getDisplayedFields()) + "px";
-
-                        let hiddenInputContainer = document.createElement("input")
-                        hiddenInputContainer.id = "Table_" + this.getName() + "_CellWidth";
-                        hiddenInputContainer.type = "hidden";
-                        hiddenInputContainer.value = tdWidth;
-                        document.getElementById('root').appendChild(hiddenInputContainer);
-
-                        let hiddenHeaderWidth = document.createElement("input")
-                        hiddenHeaderWidth.id = "Table_" + this.getName() + "_HeaderWidth";
-                        hiddenHeaderWidth.type = "hidden";
-                        hiddenHeaderWidth.value = headerWidth;
-                        document.getElementById('root').appendChild(hiddenHeaderWidth);
-
-                        tableContainerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode.parentNode).getPropertyValue("width"));
-
-                        let tableContainerWidthInput = document.createElement("input")
-                        tableContainerWidthInput.id = "TableContainer_" + this.getName() + "_HeaderWidth";
-                        tableContainerWidthInput.type = "hidden";
-                        tableContainerWidthInput.value = tableContainerWidth;
-                        document.getElementById('root').appendChild(tableContainerWidthInput);
-                        console.log("1. tableContainerWidth: " + tableContainerWidth + "," + headerWidth);
-                    } else {
-                        tdWidth = document.getElementById("Table_" + this.getName() + "_CellWidth").value;
-                        headerWidth = document.getElementById("Table_" + this.getName() + "_HeaderWidth").value;
-                        tableContainerWidth = document.getElementById("TableContainer_" + this.getName() + "_HeaderWidth").value;
-                        console.log("2. tableContainerWidth: " + tableContainerWidth + "," + headerWidth);
-                    }
-                    /*
-                    document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "margin-left:" + ((tableContainerWidth - headerWidth) / 2) + "px;margin-right:" + ((tableContainerWidth - headerWidth) / 2) + "; border-right:1px solid #ccc;");
-                    document.getElementsByName("TableHeadTR_" + this.getName())[i].setAttribute("style", "width:" + (headerWidth - this.getBrowserScrollbarWidth()) + "px");
-                    document.getElementsByName("Table_" + this.getName())[i].setAttribute("style", "max-width:" + headerWidth + "px");
-                    */
-                    document.getElementsByName("TableHead_" + this.getName())[i].setAttribute("style", "width:" + headerWidth + "px; border-right:1px solid #ccc;");
-                    document.getElementsByName("TableHeadTR_" + this.getName())[i].setAttribute("style", "width:" + (headerWidth - this.getBrowserScrollbarWidth()) + "px");
-                    document.getElementsByName("Table_" + this.getName())[i].setAttribute("style", "max-width:" + headerWidth + "px");
-
-                    for (let j in tableComp[i].childNodes) { // thead only, tbody cell width is adjusted after state of API fetch is done
-                        for (let k in tableComp[i].childNodes[j].childNodes) {
-                            if (tableComp[i].childNodes[j].childNodes[k].childNodes) {
-                                for (let l in tableComp[i].childNodes[j].childNodes[k].childNodes) {
-                                    if (tableComp[i].childNodes[j].childNodes[k].childNodes[l].className) {
-                                        tableComp[i].childNodes[j].childNodes[k].childNodes[l].setAttribute("style", "width:" + tdWidth);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
+        let test = this.checkNumber + 1;
+        console.log(test);
+        return false;
+        this.updateCheckNumber(test);
     },
     renderTable: function ()
     {
-        if (document.getElementById("BrowserScrollbarWidthHidden")){
-            this.browserScrollWidth = document.getElementById("BrowserScrollbarWidthHidden").value;
-        }
-        else
-        {
+        const [tableHeaderWidth, setTableHeaderWidth] = useState(null);
+        const [tableDataCellWidth, setTableDataCellWidth] = useState(null);
+        const [browserScrollbarWidth, setBrowserScrollbarWidth] = useState(null);
+
+        if (browserScrollbarWidth === null) {
             let tempTable = document.createElement("div");
             tempTable.className = "CollaboratorTable";
             tempTable.id = "TableTemp_" + this.getName();
@@ -345,7 +275,7 @@ const TableComponent = ClassAdapter(FormComponents, {
             while (counter < totalDisplayed) {
                 let tempTableTd = document.createElement("div")
                 tempTableTd.className = "td";
-                tempTableTr.appendChild(tempTableTd);
+                tempTableTr.appendChild(tempTableTd); // is this append child part going to consume a lot of memory?
                 counter++;
             }
 
@@ -356,85 +286,111 @@ const TableComponent = ClassAdapter(FormComponents, {
             let bodyWidth = window.getComputedStyle(document.getElementsByTagName("body")[0]).getPropertyValue('width');
             let TRWidth = window.getComputedStyle(document.getElementById("TableTempTR_" + this.getName())).getPropertyValue('width');
 
-            this.browserScrollWidth = parseInt(bodyWidth) - parseInt(TRWidth);
-            document.getElementById('root').removeChild(tempTable);
+            console.log("parseInt(bodyWidth): " + parseInt(bodyWidth) + ", parseInt(TRWidth): " + parseInt(TRWidth));
 
-            let hiddenInputContainer = document.createElement("input")
-            hiddenInputContainer.id = "BrowserScrollbarWidthHidden";
-            hiddenInputContainer.type = "hidden";
-            hiddenInputContainer.value = this.browserScrollWidth;
-            document.getElementById('root').appendChild(hiddenInputContainer);
+            setBrowserScrollbarWidth(parseInt(bodyWidth) - parseInt(TRWidth))
+            document.getElementById('root').removeChild(tempTable);
         }
 
-        return (
-            <div className="CollaboratorTable" name={'Table_' + this.getName()} onLoad={this.adjustHeaderStyle(this)} style={{ align:'center' }}>
-                <div className="thead" name={'TableHead_' + this.getName()}>
-                {
-                    <div
-                        className="tr"
-                        key={'0_' + this.getName()}
-                        name={'TableHeadTR_' + this.getName()}
-                    >
-                    {
-                        this.getFields().map((mappedData, i) => (
-                            (mappedData.showHeader)
-                            ? 
-                                (
-                                    <div
-                                        className="td"
-                                        key={this.getName() + '_' + i}
-                                        style={{ width: '10.5%' }}
-                                    >
-                                        {mappedData.header}
-                                    </div>
-                                )
-                            : 
-                                null
-                        ))
+        useEffect(() => {
+
+            let headerWidth = 400;
+            let tdWidth = 100;
+            if (document.getElementsByName("Table_" + this.getName())) {
+
+                let tableComp = document.getElementsByName("Table_" + this.getName());
+                for (let i in tableComp) {
+
+                    if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i) {
+
+                        if (tableHeaderWidth === null) {
+                            headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
+                            headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
+                            headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
+
+                            tdWidth = ((headerWidth - (2.5 * this.getDisplayedFields()) - browserScrollbarWidth) / this.getDisplayedFields()); // 4 is total of padding + margin
+                        }
                     }
-                    </div>
                 }
-                </div>
-                <div className="tbody" name={'TableBody_' + this.getName()}>
-                {
-                    (this.getData()[0].fetchingData === true)
-                    ? 
-                        <div><h1>Loading...</h1></div> 
-                    : 
-                        this.getData().map((mappedData, i) =>
-                        (
-                            <div 
+            }
+
+            if (tableHeaderWidth === null) {
+                setTableHeaderWidth(headerWidth);
+                setTableDataCellWidth(tdWidth);
+            }
+
+        }, [])
+
+        return (
+                <div className="CollaboratorTable" name={'Table_' + this.getName()} style={{ align: 'center', width: (tableHeaderWidth === null ? ("500px") : (tableHeaderWidth + "px")) }}>
+                    {
+                        <div className="thead" name={'TableHead_' + this.getName()} style={{ width: (tableHeaderWidth === null ? "0px" : (tableHeaderWidth+"px")), borderRight: "1px solid #ccc" }}>
+                            <div
                                 className="tr"
-                                key={this.getName() + '_' + this.getName() + '_' + i}
-                                name={'TableBodyTR_' + this.getName()}
-                                onDoubleClick={this.executeOnDoubleClick.bind(this)}
+                                key={'0_' + this.getName()}
+                                name={'TableHeadTR_' + this.getName()}
+                                style={{}}
                             >
-                            {
-                                this.getFields().map((mappedData2, j) => (
-                                    (mappedData2.showHeader)
-                                    ? 
-                                        (
-                                            <div
-                                                className="td"
-                                                key={this.getName() + '_' + j}
-                                                style={{ width: document.getElementById("Table_" + this.getName() + "_CellWidth").value }}
-                                            >
-                                                {mappedData[mappedData2.name]}
-                                            </div>
-                                        )
-                                    : 
-                                    null
-                                ))
-                            }
+                                {
+                                    this.getFields().map((mappedData, i) => (
+                                        (mappedData.showHeader)
+                                            ?
+                                            (
+                                                <div
+                                                    className="td"
+                                                    key={this.getName() + '_' + i}
+                                                    style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                                >
+                                                    {mappedData.header}
+                                                </div>
+                                            )
+                                            :
+                                            null
+                                    ))
+                                }
                             </div>
-                        ))
-                }
-                </div>                
-            </div>
+                    </div>
+                    }
+                    <div className="tbody" name={'TableBody_' + this.getName()}>
+                        {
+                            (this.getData()[0].fetchingData === true)
+                                ?
+                                <div><h1>Loading...</h1></div>
+                                :
+                                this.getData().map((mappedData, i) =>
+                                    (
+                                        <div
+                                            className="tr"
+                                            key={this.getName() + '_' + this.getName() + '_' + i}
+                                            name={'TableBodyTR_' + this.getName()}
+                                            onDoubleClick={this.executeOnDoubleClick.bind(this)}
+                                        >
+                                            {
+                                                this.getFields().map((mappedData2, j) => (
+                                                    (mappedData2.showHeader)
+                                                        ?
+                                                        (
+                                                            <div
+                                                                className="td"
+                                                                key={this.getName() + '_' + j}
+                                                                style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                                    >
+                                                                {mappedData[mappedData2.name]}
+                                                            </div>
+                                                        )
+                                                        :
+                                                        null
+                                                ))
+                                            }
+                                        </div>
+                                    ))
+                        }
+                    </div>
+                </div>
         )
     }
 });
-    
+
 export const GenerateButton = (props) => {
     let NewButton = new ButtonComponent(props);
     return NewButton.renderComponent();
