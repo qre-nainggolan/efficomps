@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project is yet in experimental environtment, the purpose of this package is to provide as many as self customeable react component which is easy to be implemented.
+This project is yet in experimental environtment, the purpose of this package is to provide as many as self customizeable react component which is easy to be implemented.
 
 ## Available Scripts
 
