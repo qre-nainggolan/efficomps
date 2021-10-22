@@ -35,7 +35,6 @@ const HTTPProxyClass = ClassAdapter(null, {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let ResponseContent = xhr.responseText;
             let JSONData = JSON.parse(ResponseContent);
-            let total = JSONData.data.length;
             this.executeOnSuccessMethod(JSONData.data);
         }
     },

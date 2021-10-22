@@ -248,14 +248,16 @@ const LinkWrapperClass = (0, _ClassAdapter.default)(FormComponents, {
   }
 });
 const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
+  __init: function __init() {
+    TableComponent.uber.__init.apply(this, arguments);
+
+    this.offlineData = [];
+  },
   getFields: function getFields() {
     return this.fields || [];
   },
   getData: function getData() {
-    let defaultData = [{
-      fetchingData: true
-    }];
-    return this.data || defaultData;
+    return this.data || null;
   },
   getTableWidth: function getTableWidth() {
     return this.tableWidth || "1000px";
@@ -275,6 +277,50 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
 
     return totalDisplayed;
   },
+  getOfflineData: function getOfflineData() {
+    return this.offlineData;
+  },
+  setOfflineData: function setOfflineData(existingOfflineData, sortField, sortDirection) {
+    if (!existingOfflineData) {
+      this.offlineData = this.getData();
+    } else {
+      this.offlineData = existingOfflineData;
+    }
+
+    let counter = 0;
+    let newData = [];
+
+    while (true) {
+      newData.push(this.offlineData[counter]);
+      let counter2 = newData.length - 1;
+
+      while (counter > 0) {
+        if (sortDirection === "ASC" || sortDirection === null) {
+          if (newData[counter2][sortField] < newData[counter2 - 1][sortField]) {
+            let tempData = newData[counter2];
+            newData[counter2] = newData[counter2 - 1];
+            newData[counter2 - 1] = tempData;
+          }
+        } else {
+          if (newData[counter2][sortField] > newData[counter2 - 1][sortField]) {
+            let tempData = newData[counter2];
+            newData[counter2] = newData[counter2 - 1];
+            newData[counter2 - 1] = tempData;
+          }
+        }
+
+        counter2--;
+        if (counter2 === 0) break;
+      }
+
+      counter++;
+      if (counter >= this.offlineData.length) break;
+    }
+
+    this.offlineData = newData;
+    this.offlineData.sortField = sortField;
+    this.offlineData.sortDirection = sortDirection;
+  },
   executeOnDoubleClick: function executeOnDoubleClick(e) {
     if (this.doubleClickEvent) {
       let fields = this.getFields();
@@ -291,16 +337,13 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       return false;
     }
   },
-  setTestNumber: function setTestNumber() {
-    let test = this.checkNumber + 1;
-    console.log(test);
-    return false;
-    this.updateCheckNumber(test);
-  },
   renderTable: function renderTable() {
     const [tableHeaderWidth, setTableHeaderWidth] = (0, _react.useState)(null);
     const [tableDataCellWidth, setTableDataCellWidth] = (0, _react.useState)(null);
     const [browserScrollbarWidth, setBrowserScrollbarWidth] = (0, _react.useState)(null);
+    const [offlineDataState, setOfflineDataState] = (0, _react.useState)(null);
+    const [offlineDataSortField, setOfflineDataSortField] = (0, _react.useState)(null);
+    const [offlineDataSortDirection, setOfflineDataSortDirection] = (0, _react.useState)(null);
 
     if (browserScrollbarWidth === null) {
       let tempTable = document.createElement("div");
@@ -328,7 +371,6 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       document.getElementById('root').appendChild(tempTable);
       let bodyWidth = window.getComputedStyle(document.getElementsByTagName("body")[0]).getPropertyValue('width');
       let TRWidth = window.getComputedStyle(document.getElementById("TableTempTR_" + this.getName())).getPropertyValue('width');
-      console.log("parseInt(bodyWidth): " + parseInt(bodyWidth) + ", parseInt(TRWidth): " + parseInt(TRWidth));
       setBrowserScrollbarWidth(parseInt(bodyWidth) - parseInt(TRWidth));
       document.getElementById('root').removeChild(tempTable);
     }
@@ -374,18 +416,59 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "tr",
       key: '0_' + this.getName(),
-      name: 'TableHeadTR_' + this.getName(),
-      style: {}
+      name: 'TableHeadTR_' + this.getName()
     }, this.getFields().map((mappedData, i) => mappedData.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
       className: "td",
       key: this.getName() + '_' + i,
       style: {
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
-    }, mappedData.header) : null))), /*#__PURE__*/_react.default.createElement("div", {
+    }, mappedData.header, /*#__PURE__*/_react.default.createElement("div", {
+      className: "HeaderSortingSign",
+      style: {
+        position: 'absolute',
+        right: '4px',
+        top: '1.5px'
+      },
+      onClick: () => {
+        if (offlineDataSortField === null) {
+          setOfflineDataSortDirection("DESC");
+        } else {
+          setOfflineDataSortDirection(offlineDataSortDirection === "ASC" ? "DESC" : "ASC");
+        }
+
+        setOfflineDataState(this.getOfflineData(this.setOfflineData(offlineDataState, mappedData.name, offlineDataSortDirection)));
+        setOfflineDataSortField(mappedData.name);
+      }
+    }, "^")) : null))), /*#__PURE__*/_react.default.createElement("div", {
       className: "tbody",
       name: 'TableBody_' + this.getName()
-    }, this.getData()[0].fetchingData === true ? /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h1", null, "Loading...")) : this.getData().map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
+    }, offlineDataSortField === null ? this.getData().map((mappedData, i) =>
+    /*#__PURE__*/
+    // Initial data load from Implementor
+    _react.default.createElement("div", {
+      className: "tr",
+      key: this.getName() + '_' + this.getName() + '_' + i,
+      name: 'TableBodyTR_' + this.getName(),
+      onDoubleClick: this.executeOnDoubleClick.bind(this)
+    }, this.getFields().map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
+      className: "td",
+      key: this.getName() + '_' + j,
+      style: {
+        width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
+      }
+    }, mappedData[mappedData2.name]) : null))) : offlineDataSortField != offlineDataState.sortField ? offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
+      className: "tr",
+      key: this.getName() + '_' + this.getName() + '_' + i,
+      name: 'TableBodyTR_' + this.getName(),
+      onDoubleClick: this.executeOnDoubleClick.bind(this)
+    }, this.getFields().map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
+      className: "td",
+      key: this.getName() + '_' + j,
+      style: {
+        width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
+      }
+    }, mappedData[mappedData2.name]) : null))) : offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
       className: "tr",
       key: this.getName() + '_' + this.getName() + '_' + i,
       name: 'TableBodyTR_' + this.getName(),

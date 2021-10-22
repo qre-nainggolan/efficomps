@@ -29,9 +29,15 @@
 }
 
 .CollaboratorTable .thead .tr .td{
+    position:relative;
     float:left;
     padding: 1.5px 1px 1.5px 1.5px;
     margin: 1.5px 1px 1.5px 1.5px;
+}
+
+.CollaboratorTable .thead .tr .td .HeaderSortingSign:hover{
+    cursor:pointer;
+    color:limegreen;
 }
 
 
