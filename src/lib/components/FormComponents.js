@@ -1,7 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input, Label } from 'reactstrap';
-import Draggable from "react-draggable";
 import ClassAdapter from './ClassAdapter';
 import './CollaboratorComponent.css';
 
@@ -131,16 +130,14 @@ const ModalComponents = ClassAdapter(FormComponents, {
 const NotificationPopup = ClassAdapter(ModalComponents, {
     renderComponent: function () {
         return (
-            <Draggable>
-                <Modal isOpen={this.getIsOpen()} toggle={this.executeOnToggle()} name={this.getName()}>
-                    <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
-                    <ModalBody>{this.getBodyHeaderText()}</ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={this.executeOnToggle()}>Do Something</Button>{' '}
-                        <Button color="secondary" onClick={this.executeOnToggle()}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
-            </Draggable>
+            <Modal isOpen={this.getIsOpen()} toggle={this.executeOnToggle()} name={this.getName()}>
+                <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
+                <ModalBody>{this.getBodyHeaderText()}</ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.executeOnToggle()}>Do Something</Button>{' '}
+                    <Button color="secondary" onClick={this.executeOnToggle()}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
         )
     }
 });
@@ -148,12 +145,10 @@ const NotificationPopup = ClassAdapter(ModalComponents, {
 const FormModal = ClassAdapter(ModalComponents, {
     renderComponent: function () {
         return (
-            <Draggable>
-                <Modal isOpen={this.getIsOpen()} toggle={this.executeOnToggle()} name={this.getName()} style={{ maxWidth: '100%', width: '90%', maxHeight: '100%', height: '90%' }} size="lg">
-                    <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
-                    {this.getContent()}
-                </Modal>
-            </Draggable>
+            <Modal isOpen={this.getIsOpen()} toggle={this.executeOnToggle()} name={this.getName()} style={{ maxWidth: '100%', width: '90%', maxHeight: '100%', height: '90%' }} size="lg">
+                <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
+                {this.getContent()}
+            </Modal>
         )
     }
 });
@@ -164,18 +159,16 @@ const FormModalWrapperClass = ClassAdapter(ModalComponents, {
     },
     renderComponent: function () {
         return (
-            <Draggable>
-                <Modal
-                    isOpen={this.getIsOpen()}
-                    toggle={this.executeOnToggle()}
-                    name={this.getName()}
-                    style={{ maxWidth: '100%', width: '95%' }}
-                    size="lg"
-                >
-                    <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
-                    {this.getChildren()}
-                </Modal>
-            </Draggable>
+            <Modal
+                isOpen={this.getIsOpen()}
+                toggle={this.executeOnToggle()}
+                name={this.getName()}
+                style={{ maxWidth: '100%', width: '95%' }}
+                size="lg"
+            >
+                <ModalHeader toggle={this.executeOnToggle()}>{this.getHeaderTitle()}</ModalHeader>
+                {this.getChildren()}
+            </Modal>
         )
     }
 });
@@ -228,11 +221,16 @@ const TableComponent = ClassAdapter(FormComponents, {
         }
         return totalDisplayed;
     },
-    getOfflineData: function() {
+    getOfflineData: function () {
         return this.offlineData;
     },
-    setOfflineData: function (existingOfflineData, sortField, sortDirection)
-    {
+    setCurrentSortfield: function (field) {
+        this.currentSortfield = field;
+    },
+    getCurrentSortfield: function () {
+        return this.currentSortfield;
+    },
+    setOfflineData: function (existingOfflineData, sortField, sortDirection) {
         if (!existingOfflineData) {
             this.offlineData = this.getData();
         }
@@ -242,13 +240,12 @@ const TableComponent = ClassAdapter(FormComponents, {
 
         let counter = 0;
         let newData = []
-        while (true)
-        {
+        while (true) {
             newData.push(this.offlineData[counter]);
 
-            let counter2 = newData.length-1;
+            let counter2 = newData.length - 1;
             while (counter > 0) {
-                if (sortDirection === "ASC" || sortDirection === null) { 
+                if (sortDirection === "ASC" || sortDirection === null || this.offlineData.sortField != this.getCurrentSortfield()) {
                     if (newData[counter2][sortField] < newData[(counter2 - 1)][sortField]) {
                         let tempData = newData[counter2];
                         newData[counter2] = newData[counter2 - 1]
@@ -281,7 +278,7 @@ const TableComponent = ClassAdapter(FormComponents, {
             let fields = this.getFields();
             let counter = 0;
             let rowData = {};
-            while (counter < e.currentTarget.childElementCount){
+            while (counter < e.currentTarget.childElementCount) {
                 rowData[fields[counter].name] = e.currentTarget.children[counter].innerText;
                 counter++;
             }
@@ -290,8 +287,7 @@ const TableComponent = ClassAdapter(FormComponents, {
             return false;
         }
     },
-    renderTable: function ()
-    {
+    renderTable: function () {
         const [tableHeaderWidth, setTableHeaderWidth] = useState(null);
         const [tableDataCellWidth, setTableDataCellWidth] = useState(null);
         const [browserScrollbarWidth, setBrowserScrollbarWidth] = useState(null);
@@ -299,6 +295,11 @@ const TableComponent = ClassAdapter(FormComponents, {
         const [offlineDataState, setOfflineDataState] = useState(null);
         const [offlineDataSortField, setOfflineDataSortField] = useState(null);
         const [offlineDataSortDirection, setOfflineDataSortDirection] = useState(null);
+
+        const [tableFields, setTableFields] = useState(this.getFields());
+        const [dragSource, setDragSource] = useState(null);
+
+        const [seletedRowKey, setSelectedRowKey] = useState('')
 
         if (browserScrollbarWidth === null) {
             let tempTable = document.createElement("div");
@@ -345,7 +346,7 @@ const TableComponent = ClassAdapter(FormComponents, {
 
                     if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i) {
 
-                        if (tableHeaderWidth === null) {
+                        if (tableHeaderWidth === null){
                             headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
                             headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
                             headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
@@ -377,21 +378,48 @@ const TableComponent = ClassAdapter(FormComponents, {
                             name={'TableHeadTR_' + this.getName()}
                         >
                         {
-                            this.getFields().map((mappedData, i) => ((mappedData.showHeader)
+                            tableFields.map((mappedData, i) => ((mappedData.showHeader)
                             ?
                             (
                                 <div
                                     className="td"
                                     key={this.getName() + '_' + i}
                                     style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                    onDragOver={(e) => {
+                                        e.preventDefault();
+                                    }}
+                                    draggable={true}
+                                    onDrop={(e) => {
+
+                                        let sourceIndex, targetIndex;
+                                        let tableFieldsTemp = [];
+
+                                        for (let key in tableFields) {
+                                            if (tableFields[key].name === dragSource) {
+                                                sourceIndex = key;
+                                            }
+                                            if (tableFields[key].name === mappedData.name) {
+                                                targetIndex = key;
+                                            }
+                                            tableFieldsTemp[key] = tableFields[key];
+                                        }
+
+                                        tableFieldsTemp[targetIndex] = tableFields[sourceIndex];
+                                        tableFieldsTemp[sourceIndex] = tableFields[targetIndex];
+
+                                        setTableFields(tableFieldsTemp);
+                                    }}
+                                    onDragStart={(e) => {
+                                        setDragSource(mappedData.name);
+                                    }}
                                 >
                                     {mappedData.header}
                                     <div
                                         className="HeaderSortingSign"
                                         style={{ position: 'absolute', right: '4px', top: '1.5px' }}
                                         onClick={() => {
-                                            if (offlineDataSortField === null)
-                                            {
+                                            this.setCurrentSortfield(mappedData.name);
+                                            if (offlineDataSortField === null) {
                                                 setOfflineDataSortDirection("DESC")
                                             } else {
                                                 setOfflineDataSortDirection(offlineDataSortDirection === "ASC" ? "DESC" : "ASC")
@@ -414,16 +442,19 @@ const TableComponent = ClassAdapter(FormComponents, {
                 <div className="tbody" name={'TableBody_' + this.getName()}>
                 {
                     (offlineDataSortField === null)
-                    ?
+                        ?
                         this.getData().map((mappedData, i) => ( // Initial data load from Implementor
                             <div
-                                className="tr"
-                                key={this.getName() + '_' + this.getName() + '_' + i}
+                                className={seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr"}
+                                key={'ContentTR_' + this.getName() + '_' + i}
                                 name={'TableBodyTR_' + this.getName()}
                                 onDoubleClick={this.executeOnDoubleClick.bind(this)}
+                                onClick={() => {
+                                    setSelectedRowKey('ContentTR_' + this.getName() + '_' + i)
+                                }}
                             >
                                 {
-                                    this.getFields().map((mappedData2, j) => ((mappedData2.showHeader)
+                                    tableFields.map((mappedData2, j) => ((mappedData2.showHeader)
                                         ?
                                         (
                                             <div
@@ -440,66 +471,72 @@ const TableComponent = ClassAdapter(FormComponents, {
                                 }
                             </div>
                         ))
-                    :
-                        (offlineDataSortField != offlineDataState.sortField)
-                        ?
-                        (
-                            offlineDataState.map((mappedData, i) => (
-                                <div
-                                    className="tr"
-                                    key={this.getName() + '_' + this.getName() + '_' + i}
-                                    name={'TableBodyTR_' + this.getName()}
-                                    onDoubleClick={this.executeOnDoubleClick.bind(this)}
-                                >
-                                {
-                                    this.getFields().map((mappedData2, j) => (
-                                        (mappedData2.showHeader)
-                                            ?
-                                            (
-                                                <div
-                                                    className="td"
-                                                    key={this.getName() + '_' + j}
-                                                    style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px")}}
-                                                >
-                                                    {mappedData[mappedData2.name]}
-                                                </div>
-                                            )
-                                            :
-                                            null
-                                    ))
-                                }
-                                </div>
-                            ))
-                        )
                         :
-                        (
-                            offlineDataState.map((mappedData, i) => (
-                                <div
-                                    className="tr"
-                                    key={this.getName() + '_' + this.getName() + '_' + i}
-                                    name={'TableBodyTR_' + this.getName()}
-                                    onDoubleClick={this.executeOnDoubleClick.bind(this)}
-                                >
-                                    {
-                                        this.getFields().map((mappedData2, j) => (
-                                            (mappedData2.showHeader)
-                                                ?
-                                                (
-                                                    <div
-                                                        className="td"
-                                                        key={this.getName() + '_' + j}
-                                                        style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px")}}
-                                                    >
-                                                        {mappedData[mappedData2.name]}
-                                                    </div>
-                                                )
-                                                :
-                                                null
-                                        ))
-                                    }
-                                </div>
-                            ))
-                        )
+                        (offlineDataSortField != offlineDataState.sortField)
+                            ?
+                            (
+                                offlineDataState.map((mappedData, i) => (
+                                    <div
+                                        className={seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr"}
+                                        key={'ContentTR_' + this.getName() + '_' + i}
+                                        name={'TableBodyTR_' + this.getName()}
+                                        onDoubleClick={this.executeOnDoubleClick.bind(this)}
+                                        onClick={() => {
+                                            setSelectedRowKey('ContentTR_' + this.getName() + '_' + i)
+                                        }}
+                                    >
+                                        {
+                                            tableFields.map((mappedData2, j) => (
+                                                (mappedData2.showHeader)
+                                                    ?
+                                                    (
+                                                        <div
+                                                            className="td"
+                                                            key={this.getName() + '_' + j}
+                                                            style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                                        >
+                                                            {mappedData[mappedData2.name]}
+                                                        </div>
+                                                    )
+                                                    :
+                                                    null
+                                            ))
+                                        }
+                                    </div>
+                                ))
+                            )
+                            :
+                            (
+                                offlineDataState.map((mappedData, i) => (
+                                    <div
+                                        className="tr"
+                                        key={this.getName() + '_' + this.getName() + '_' + i}
+                                        name={'TableBodyTR_' + this.getName()}
+                                        onDoubleClick={this.executeOnDoubleClick.bind(this)}
+                                        onClick={() => {
+                                            setSelectedRowKey('ContentTR_' + this.getName() + '_' + i)
+                                        }}
+                                    >
+                                        {
+                                            tableFields.map((mappedData2, j) => (
+                                                (mappedData2.showHeader)
+                                                    ?
+                                                    (
+                                                        <div
+                                                            className="td"
+                                                            key={this.getName() + '_' + j}
+                                                            style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                                        >
+                                                            {mappedData[mappedData2.name]}
+                                                        </div>
+                                                    )
+                                                    :
+                                                    null
+                                            ))
+                                        }
+                                    </div>
+                                ))
+                            )
                 }
                 </div>
             </div>
