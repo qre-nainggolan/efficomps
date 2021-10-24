@@ -21,8 +21,6 @@ var _reactRouterDom = require("react-router-dom");
 
 var _reactstrap = require("reactstrap");
 
-var _reactDraggable = _interopRequireDefault(require("react-draggable"));
-
 var _ClassAdapter = _interopRequireDefault(require("./ClassAdapter"));
 
 require("./CollaboratorComponent.css");
@@ -172,7 +170,7 @@ const ModalComponents = (0, _ClassAdapter.default)(FormComponents, {
 });
 const NotificationPopup = (0, _ClassAdapter.default)(ModalComponents, {
   renderComponent: function renderComponent() {
-    return /*#__PURE__*/_react.default.createElement(_reactDraggable.default, null, /*#__PURE__*/_react.default.createElement(_reactstrap.Modal, {
+    return /*#__PURE__*/_react.default.createElement(_reactstrap.Modal, {
       isOpen: this.getIsOpen(),
       toggle: this.executeOnToggle(),
       name: this.getName()
@@ -184,12 +182,12 @@ const NotificationPopup = (0, _ClassAdapter.default)(ModalComponents, {
     }, "Do Something"), ' ', /*#__PURE__*/_react.default.createElement(_reactstrap.Button, {
       color: "secondary",
       onClick: this.executeOnToggle()
-    }, "Cancel"))));
+    }, "Cancel")));
   }
 });
 const FormModal = (0, _ClassAdapter.default)(ModalComponents, {
   renderComponent: function renderComponent() {
-    return /*#__PURE__*/_react.default.createElement(_reactDraggable.default, null, /*#__PURE__*/_react.default.createElement(_reactstrap.Modal, {
+    return /*#__PURE__*/_react.default.createElement(_reactstrap.Modal, {
       isOpen: this.getIsOpen(),
       toggle: this.executeOnToggle(),
       name: this.getName(),
@@ -202,7 +200,7 @@ const FormModal = (0, _ClassAdapter.default)(ModalComponents, {
       size: "lg"
     }, /*#__PURE__*/_react.default.createElement(_reactstrap.ModalHeader, {
       toggle: this.executeOnToggle()
-    }, this.getHeaderTitle()), this.getContent()));
+    }, this.getHeaderTitle()), this.getContent());
   }
 });
 const FormModalWrapperClass = (0, _ClassAdapter.default)(ModalComponents, {
@@ -210,7 +208,7 @@ const FormModalWrapperClass = (0, _ClassAdapter.default)(ModalComponents, {
     return this.children || /*#__PURE__*/_react.default.createElement("div", null);
   },
   renderComponent: function renderComponent() {
-    return /*#__PURE__*/_react.default.createElement(_reactDraggable.default, null, /*#__PURE__*/_react.default.createElement(_reactstrap.Modal, {
+    return /*#__PURE__*/_react.default.createElement(_reactstrap.Modal, {
       isOpen: this.getIsOpen(),
       toggle: this.executeOnToggle(),
       name: this.getName(),
@@ -221,7 +219,7 @@ const FormModalWrapperClass = (0, _ClassAdapter.default)(ModalComponents, {
       size: "lg"
     }, /*#__PURE__*/_react.default.createElement(_reactstrap.ModalHeader, {
       toggle: this.executeOnToggle()
-    }, this.getHeaderTitle()), this.getChildren()));
+    }, this.getHeaderTitle()), this.getChildren());
   }
 });
 const LinkWrapperClass = (0, _ClassAdapter.default)(FormComponents, {
@@ -280,6 +278,12 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
   getOfflineData: function getOfflineData() {
     return this.offlineData;
   },
+  setCurrentSortfield: function setCurrentSortfield(field) {
+    this.currentSortfield = field;
+  },
+  getCurrentSortfield: function getCurrentSortfield() {
+    return this.currentSortfield;
+  },
   setOfflineData: function setOfflineData(existingOfflineData, sortField, sortDirection) {
     if (!existingOfflineData) {
       this.offlineData = this.getData();
@@ -295,7 +299,7 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       let counter2 = newData.length - 1;
 
       while (counter > 0) {
-        if (sortDirection === "ASC" || sortDirection === null) {
+        if (sortDirection === "ASC" || sortDirection === null || this.offlineData.sortField != this.getCurrentSortfield()) {
           if (newData[counter2][sortField] < newData[counter2 - 1][sortField]) {
             let tempData = newData[counter2];
             newData[counter2] = newData[counter2 - 1];
@@ -344,6 +348,9 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
     const [offlineDataState, setOfflineDataState] = (0, _react.useState)(null);
     const [offlineDataSortField, setOfflineDataSortField] = (0, _react.useState)(null);
     const [offlineDataSortDirection, setOfflineDataSortDirection] = (0, _react.useState)(null);
+    const [tableFields, setTableFields] = (0, _react.useState)(this.getFields());
+    const [dragSource, setDragSource] = (0, _react.useState)(null);
+    const [seletedRowKey, setSelectedRowKey] = (0, _react.useState)('');
 
     if (browserScrollbarWidth === null) {
       let tempTable = document.createElement("div");
@@ -417,11 +424,38 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       className: "tr",
       key: '0_' + this.getName(),
       name: 'TableHeadTR_' + this.getName()
-    }, this.getFields().map((mappedData, i) => mappedData.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
+    }, tableFields.map((mappedData, i) => mappedData.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
       className: "td",
       key: this.getName() + '_' + i,
       style: {
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
+      },
+      onDragOver: e => {
+        e.preventDefault();
+      },
+      draggable: true,
+      onDrop: e => {
+        let sourceIndex, targetIndex;
+        let tableFieldsTemp = [];
+
+        for (let key in tableFields) {
+          if (tableFields[key].name === dragSource) {
+            sourceIndex = key;
+          }
+
+          if (tableFields[key].name === mappedData.name) {
+            targetIndex = key;
+          }
+
+          tableFieldsTemp[key] = tableFields[key];
+        }
+
+        tableFieldsTemp[targetIndex] = tableFields[sourceIndex];
+        tableFieldsTemp[sourceIndex] = tableFields[targetIndex];
+        setTableFields(tableFieldsTemp);
+      },
+      onDragStart: e => {
+        setDragSource(mappedData.name);
       }
     }, mappedData.header, /*#__PURE__*/_react.default.createElement("div", {
       className: "HeaderSortingSign",
@@ -431,6 +465,8 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
         top: '1.5px'
       },
       onClick: () => {
+        this.setCurrentSortfield(mappedData.name);
+
         if (offlineDataSortField === null) {
           setOfflineDataSortDirection("DESC");
         } else {
@@ -447,22 +483,28 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
     /*#__PURE__*/
     // Initial data load from Implementor
     _react.default.createElement("div", {
-      className: "tr",
-      key: this.getName() + '_' + this.getName() + '_' + i,
+      className: seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr",
+      key: 'ContentTR_' + this.getName() + '_' + i,
       name: 'TableBodyTR_' + this.getName(),
-      onDoubleClick: this.executeOnDoubleClick.bind(this)
-    }, this.getFields().map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
+      onDoubleClick: this.executeOnDoubleClick.bind(this),
+      onClick: () => {
+        setSelectedRowKey('ContentTR_' + this.getName() + '_' + i);
+      }
+    }, tableFields.map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
       className: "td",
       key: this.getName() + '_' + j,
       style: {
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
     }, mappedData[mappedData2.name]) : null))) : offlineDataSortField != offlineDataState.sortField ? offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
-      className: "tr",
-      key: this.getName() + '_' + this.getName() + '_' + i,
+      className: seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr",
+      key: 'ContentTR_' + this.getName() + '_' + i,
       name: 'TableBodyTR_' + this.getName(),
-      onDoubleClick: this.executeOnDoubleClick.bind(this)
-    }, this.getFields().map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
+      onDoubleClick: this.executeOnDoubleClick.bind(this),
+      onClick: () => {
+        setSelectedRowKey('ContentTR_' + this.getName() + '_' + i);
+      }
+    }, tableFields.map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
       className: "td",
       key: this.getName() + '_' + j,
       style: {
@@ -472,8 +514,11 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       className: "tr",
       key: this.getName() + '_' + this.getName() + '_' + i,
       name: 'TableBodyTR_' + this.getName(),
-      onDoubleClick: this.executeOnDoubleClick.bind(this)
-    }, this.getFields().map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
+      onDoubleClick: this.executeOnDoubleClick.bind(this),
+      onClick: () => {
+        setSelectedRowKey('ContentTR_' + this.getName() + '_' + i);
+      }
+    }, tableFields.map((mappedData2, j) => mappedData2.showHeader ? /*#__PURE__*/_react.default.createElement("div", {
       className: "td",
       key: this.getName() + '_' + j,
       style: {

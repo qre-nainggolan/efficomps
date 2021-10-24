@@ -16,53 +16,69 @@
 
 .CollaboratorTable .thead {
     background-color: #e6e2ee !important;
-    height:auto;
-    float:left;
+    height: auto;
+    float: left;
 }
 
 .CollaboratorTable .thead .tr {
     float: left;
     border-bottom: 1px solid #ccc;
-    border-right:1px solid #88d1fb;
+    border-right: 1px solid #88d1fb;
     background-color: #e6e2ee;
     font-weight: bold;
 }
 
-.CollaboratorTable .thead .tr .td{
-    position:relative;
-    float:left;
-    padding: 1.5px 1px 1.5px 1.5px;
-    margin: 1.5px 1px 1.5px 1.5px;
-}
-
-.CollaboratorTable .thead .tr .td .HeaderSortingSign:hover{
-    cursor:pointer;
-    color:limegreen;
-}
-
-
-.CollaboratorTable .tbody {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height:300px;
-    max-height:350px;
-    overflow-y:scroll;
-}
-
-
-.CollaboratorTable .tbody .tr {
-    float:left;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-bottom: 1px solid #ccc;
-}
-
-.CollaboratorTable .tbody .tr .td {
+.CollaboratorTable .thead .tr .td {
+    position: relative;
     float: left;
     padding: 1.5px 1px 1.5px 1.5px;
     margin: 1.5px 1px 1.5px 1.5px;
 }
 
-.CollaboratorTable .tbody .tr:hover {
+.CollaboratorTable .thead .tr .td .HeaderSortingSign:hover {
+    cursor: pointer;
+    color: limegreen;
+}
+
+.CollaboratorTable .tbody {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 300px;
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+.CollaboratorTable .tbody .tr, .CollaboratorTable .tbody .trNormal {
+    float: left;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-bottom: 1px solid #ccc;
+}
+
+.CollaboratorTable .tbody .tr .td, .CollaboratorTable .tbody .trNormal .td {
+    float: left;
+    padding: 1.5px 1px 1.5px 1.5px;
+    margin: 1.5px 1px 1.5px 1.5px;
+}
+
+.CollaboratorTable .tbody .tr:hover, .CollaboratorTable .tbody .trNormal:hover {
+    background-color: #e7f5ff !important;
+}
+
+.CollaboratorTable .tbody .trHighlighted {
+    float: left;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-bottom: 1px solid #ccc;
+    background-color: #e7f5ff;
+}
+
+.CollaboratorTable .tbody .trHighlighted .td {
+    float: left;
+    padding: 1.5px 1px 1.5px 1.5px;
+    margin: 1.5px 1px 1.5px 1.5px;
+}
+
+.CollaboratorTable .tbody .trHighlighted:hover {
     background-color: #e7f5ff !important;
 }

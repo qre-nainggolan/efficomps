@@ -86,9 +86,7 @@ const InputComponents = ClassAdapter(FormComponents, {
 
 const InputText = ClassAdapter(InputComponents, {
     renderComponent: function () {
-        return (
-            <Input type="text" style={this.getDirectStyle()} value={this.getValue()} onChange={this.executeOnChange()} placeholder={this.getPlaceholder()} />
-        )
+        return (<Input type="text" style={this.getDirectStyle()} value={this.getValue()} onChange={this.executeOnChange()} placeholder={this.getPlaceholder()} />)
     }
 });
 
@@ -203,6 +201,9 @@ const TableComponent = ClassAdapter(FormComponents, {
     getFields: function () {
         return this.fields || [];
     },
+    getHeight: function () {
+        return this.height || null;
+    },
     getData: function () {
         return this.data || null;
     },
@@ -230,29 +231,37 @@ const TableComponent = ClassAdapter(FormComponents, {
     getCurrentSortfield: function () {
         return this.currentSortfield;
     },
-    setOfflineData: function (existingOfflineData, sortField, sortDirection) {
-        if (!existingOfflineData) {
+    setOfflineData: function (existingOfflineData, sortField, sortDirection)
+    {
+        if (!existingOfflineData)
+        {
             this.offlineData = this.getData();
         }
-        else {
+        else
+        {
             this.offlineData = existingOfflineData;
         }
 
         let counter = 0;
-        let newData = []
-        while (true) {
+        let newData = [];
+        while (true)
+        {
             newData.push(this.offlineData[counter]);
 
             let counter2 = newData.length - 1;
-            while (counter > 0) {
+            while (counter > 0)
+            {
                 if (sortDirection === "ASC" || sortDirection === null || this.offlineData.sortField != this.getCurrentSortfield()) {
                     if (newData[counter2][sortField] < newData[(counter2 - 1)][sortField]) {
                         let tempData = newData[counter2];
                         newData[counter2] = newData[counter2 - 1]
                         newData[(counter2 - 1)] = tempData;
                     }
-                } else {
-                    if (newData[counter2][sortField] > newData[(counter2 - 1)][sortField]) {
+                }
+                else
+                {
+                    if (newData[counter2][sortField] > newData[(counter2 - 1)][sortField])
+                    {
                         let tempData = newData[counter2];
                         newData[counter2] = newData[counter2 - 1]
                         newData[(counter2 - 1)] = tempData;
@@ -278,7 +287,7 @@ const TableComponent = ClassAdapter(FormComponents, {
             let fields = this.getFields();
             let counter = 0;
             let rowData = {};
-            while (counter < e.currentTarget.childElementCount) {
+            while (counter < e.currentTarget.childElementCount){
                 rowData[fields[counter].name] = e.currentTarget.children[counter].innerText;
                 counter++;
             }
@@ -287,7 +296,8 @@ const TableComponent = ClassAdapter(FormComponents, {
             return false;
         }
     },
-    renderTable: function () {
+    renderTable: function ()
+    {
         const [tableHeaderWidth, setTableHeaderWidth] = useState(null);
         const [tableDataCellWidth, setTableDataCellWidth] = useState(null);
         const [browserScrollbarWidth, setBrowserScrollbarWidth] = useState(null);
@@ -299,9 +309,10 @@ const TableComponent = ClassAdapter(FormComponents, {
         const [tableFields, setTableFields] = useState(this.getFields());
         const [dragSource, setDragSource] = useState(null);
 
-        const [seletedRowKey, setSelectedRowKey] = useState('')
+        const [seletedRowKey, setSelectedRowKey] = useState('');
 
-        if (browserScrollbarWidth === null) {
+        if (browserScrollbarWidth === null)
+        {
             let tempTable = document.createElement("div");
             tempTable.className = "CollaboratorTable";
             tempTable.id = "TableTemp_" + this.getName();
@@ -317,8 +328,8 @@ const TableComponent = ClassAdapter(FormComponents, {
             let counter = 0;
             let totalDisplayed = this.getDisplayedFields();
 
-            while (counter < totalDisplayed) {
-                let tempTableTd = document.createElement("div")
+            while (counter < totalDisplayed){
+                let tempTableTd = document.createElement("div");
                 tempTableTd.className = "td";
                 tempTableTr.appendChild(tempTableTd); // is this append child part going to consume a lot of memory?
                 counter++;
@@ -335,18 +346,19 @@ const TableComponent = ClassAdapter(FormComponents, {
             document.getElementById('root').removeChild(tempTable);
         }
 
-        useEffect(() => {
-
+        useEffect(() =>
+        {
             let headerWidth = 400;
             let tdWidth = 100;
-            if (document.getElementsByName("Table_" + this.getName())) {
-
+            if (document.getElementsByName("Table_" + this.getName()))
+            {
                 let tableComp = document.getElementsByName("Table_" + this.getName());
-                for (let i in tableComp) {
-
-                    if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i) {
-
-                        if (tableHeaderWidth === null){
+                for (let i in tableComp)
+                {
+                    if (typeof tableComp[i] === "object" && tableComp[i].id != "Table_" + this.getName() + "_" + i)
+                    {
+                        if (tableHeaderWidth === null)
+                        {
                             headerWidth = parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("width"));
                             headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-left"));
                             headerWidth = headerWidth - parseInt(window.getComputedStyle(tableComp[i].parentNode).getPropertyValue("padding-right"));
@@ -371,7 +383,7 @@ const TableComponent = ClassAdapter(FormComponents, {
                 style={{ align: 'center', width: (tableHeaderWidth === null ? ("500px") : (tableHeaderWidth + "px")) }}
             >
                 {
-                    <div className="thead" name={'TableHead_' + this.getName()} style={{ width: (tableHeaderWidth === null ? "0px" : (tableHeaderWidth + "px")), borderRight: "1px solid #ccc" }}>
+                    <div className="thead" name={'TableHead_' + this.getName()} style={{ width: (tableHeaderWidth === null ? "0px" : (tableHeaderWidth + "px")) }}>
                         <div
                             className="tr"
                             key={'0_' + this.getName()}
@@ -384,13 +396,10 @@ const TableComponent = ClassAdapter(FormComponents, {
                                 <div
                                     className="td"
                                     key={this.getName() + '_' + i}
-                                    style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
-                                    onDragOver={(e) => {
-                                        e.preventDefault();
-                                    }}
+                                    style={{ maxWidth: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px"), width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                    onDragOver={(e) => { e.preventDefault(); }}
                                     draggable={true}
-                                    onDrop={(e) => {
-
+                                    onDrop={() => {
                                         let sourceIndex, targetIndex;
                                         let tableFieldsTemp = [];
 
@@ -409,7 +418,8 @@ const TableComponent = ClassAdapter(FormComponents, {
 
                                         setTableFields(tableFieldsTemp);
                                     }}
-                                    onDragStart={(e) => {
+                                    onDragStart={() => {
+                                        console.log(mappedData.name);
                                         setDragSource(mappedData.name);
                                     }}
                                 >
@@ -439,13 +449,13 @@ const TableComponent = ClassAdapter(FormComponents, {
                         </div>
                     </div>
                 }
-                <div className="tbody" name={'TableBody_' + this.getName()}>
+                <div className="tbody" name={'TableBody_' + this.getName()} style={{ maxHeight: (this.getHeight() === null ? 'auto' : this.getHeight())} }>
                 {
                     (offlineDataSortField === null)
                         ?
                         this.getData().map((mappedData, i) => ( // Initial data load from Implementor
                             <div
-                                className={seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr"}
+                                className={seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr"} 
                                 key={'ContentTR_' + this.getName() + '_' + i}
                                 name={'TableBodyTR_' + this.getName()}
                                 onDoubleClick={this.executeOnDoubleClick.bind(this)}
@@ -460,9 +470,9 @@ const TableComponent = ClassAdapter(FormComponents, {
                                             <div
                                                 className="td"
                                                 key={this.getName() + '_' + j}
-                                                style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
+                                                style={{ maxWidth: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px"), width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
                                             >
-                                                {mappedData[mappedData2.name]}
+                                                    {(!mappedData[mappedData2.name]) || mappedData[mappedData2.name] === "" ? '\u00A0' : mappedData[mappedData2.name]}
                                             </div>
                                         )
                                         :
@@ -495,7 +505,7 @@ const TableComponent = ClassAdapter(FormComponents, {
                                                             key={this.getName() + '_' + j}
                                                             style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
                                                         >
-                                                            {mappedData[mappedData2.name]}
+                                                            {(!mappedData[mappedData2.name]) || mappedData[mappedData2.name] === "" ? '\u00A0' : mappedData[mappedData2.name]}
                                                         </div>
                                                     )
                                                     :
@@ -509,7 +519,7 @@ const TableComponent = ClassAdapter(FormComponents, {
                             (
                                 offlineDataState.map((mappedData, i) => (
                                     <div
-                                        className="tr"
+                                        className={seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr"}
                                         key={this.getName() + '_' + this.getName() + '_' + i}
                                         name={'TableBodyTR_' + this.getName()}
                                         onDoubleClick={this.executeOnDoubleClick.bind(this)}
@@ -527,7 +537,7 @@ const TableComponent = ClassAdapter(FormComponents, {
                                                             key={this.getName() + '_' + j}
                                                             style={{ width: (tableDataCellWidth === null) ? "50px" : (tableDataCellWidth + "px") }}
                                                         >
-                                                            {mappedData[mappedData2.name]}
+                                                                {(!mappedData[mappedData2.name]) || mappedData[mappedData2.name] === "" ? '\u00A0' : mappedData[mappedData2.name]}
                                                         </div>
                                                     )
                                                     :
