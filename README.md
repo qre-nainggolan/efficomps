@@ -49,7 +49,10 @@ Some snippets:
         data={this.state.sampleList}
         name={'CommodityTable'}
         doubleClickEvent={this.loadSelectedData}
+        width={'350px'}
     />
 
-https://user-images.githubusercontent.com/940036/138558093-04844185-a4ac-4f73-b6be-5765d2db73b7.mp4
+
+
+https://user-images.githubusercontent.com/940036/138581165-944f6b24-bb8f-4fca-bb3d-b6ad0f2848ef.mp4
 
