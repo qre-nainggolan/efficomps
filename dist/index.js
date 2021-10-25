@@ -3,6 +3,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+Object.defineProperty(exports, "ContainerComponent", {
+  enumerable: true,
+  get: function get() {
+    return _ContainerComponents.ContainerComponent;
+  }
+});
 Object.defineProperty(exports, "DataModelling", {
   enumerable: true,
   get: function get() {
@@ -53,6 +59,8 @@ Object.defineProperty(exports, "TableWrapper", {
 });
 
 var _FormComponents = require("./components/FormComponents");
+
+var _ContainerComponents = require("./components/ContainerComponents");
 
 var _HttpProxy = require("./components/HttpProxy");
 

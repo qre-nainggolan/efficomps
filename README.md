@@ -54,4 +54,4 @@ Some snippets:
 
 
 
-https://user-images.githubusercontent.com/940036/138636230-d53b4227-521d-4f87-abeb-740a4639a984.mp4
+![Weighbridge_FE - Google Chrome 2021-10-25 11-49-22](https://user-images.githubusercontent.com/940036/138637437-53072117-4898-446b-a700-00a411cc25eb.gif)

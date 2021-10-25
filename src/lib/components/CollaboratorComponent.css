@@ -97,3 +97,69 @@
 .CollaboratorTable .tbody .trHighlighted:hover {
     background-color: #e7f5ff !important;
 }
+
+.EfficompsContainerWrapper {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    border: 0;
+    position: relative;
+    background: rgb(240, 240, 240);
+}
+
+.EfficompsContainerLeftColumnHide {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-right: 1px inset #ccc;
+    border-top-right-radius: 3px;
+    background: rgb(240, 240, 240);
+    width: 45px;
+    margin: 0px;
+}
+
+.EfficompsContainerLeftColumnUnhide, .EfficompsContainerLeftColumnHideHover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-right: 1px inset #ccc;
+    border-top-right-radius: 3px;
+    background: rgb(240, 240, 240);
+    width: 200px;
+    margin: 0px;
+    z-index:1000;
+}
+
+.EfficompsContainerContentColumn, .EfficompsContainerContentColumnWider {
+    background: rgb(240, 240, 240);
+    border: 1px inset #ccc;
+}
+
+.EfficompsContainerContentColumn {
+    margin-left: 208px;
+}
+
+.EfficompsContainerContentColumnWider {
+    margin-left: 45px;
+}
+
+.EfficompsLeftColumnToggleButton {
+    position: absolute;
+    top: 1px;
+    right: 2px;
+    height: 40px;
+    width: 40px;
+    border-radius: 3px;
+    border: 1px solid #e1dada;
+    background-color: #e7f5ff;
+    z-index:1001;
+}
+
+.EfficompsLeftColumnToggleButton:hover {
+    cursor: pointer;
+    background-color: aliceblue;
+}
+
+.EfficompsLeftColumnMenuContainer{
+    margin-top:44px;
+    padding-left:4px;
+}
