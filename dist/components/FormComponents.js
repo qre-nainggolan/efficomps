@@ -254,6 +254,9 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
   getFields: function getFields() {
     return this.fields || [];
   },
+  getHeight: function getHeight() {
+    return this.height || null;
+  },
   getData: function getData() {
     return this.data || null;
   },
@@ -417,8 +420,7 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       className: "thead",
       name: 'TableHead_' + this.getName(),
       style: {
-        width: tableHeaderWidth === null ? "0px" : tableHeaderWidth + "px",
-        borderRight: "1px solid #ccc"
+        width: tableHeaderWidth === null ? "0px" : tableHeaderWidth + "px"
       }
     }, /*#__PURE__*/_react.default.createElement("div", {
       className: "tr",
@@ -428,13 +430,14 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       className: "td",
       key: this.getName() + '_' + i,
       style: {
+        maxWidth: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px",
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       },
       onDragOver: e => {
         e.preventDefault();
       },
       draggable: true,
-      onDrop: e => {
+      onDrop: () => {
         let sourceIndex, targetIndex;
         let tableFieldsTemp = [];
 
@@ -454,7 +457,7 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
         tableFieldsTemp[sourceIndex] = tableFields[targetIndex];
         setTableFields(tableFieldsTemp);
       },
-      onDragStart: e => {
+      onDragStart: () => {
         setDragSource(mappedData.name);
       }
     }, mappedData.header, /*#__PURE__*/_react.default.createElement("div", {
@@ -475,10 +478,15 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
 
         setOfflineDataState(this.getOfflineData(this.setOfflineData(offlineDataState, mappedData.name, offlineDataSortDirection)));
         setOfflineDataSortField(mappedData.name);
+        tableFields[i].nextSortDirection = tableFields[i].nextSortDirection === "DESC" ? "ASC" : "DESC";
+        setTableFields(tableFields);
       }
-    }, "^")) : null))), /*#__PURE__*/_react.default.createElement("div", {
+    }, mappedData.name === offlineDataSortField ? mappedData.nextSortDirection === "DESC" ? "\u02C5" : "^" : "-")) : null))), /*#__PURE__*/_react.default.createElement("div", {
       className: "tbody",
-      name: 'TableBody_' + this.getName()
+      name: 'TableBody_' + this.getName(),
+      style: {
+        maxHeight: this.getHeight() === null ? 'auto' : this.getHeight()
+      }
     }, offlineDataSortField === null ? this.getData().map((mappedData, i) =>
     /*#__PURE__*/
     // Initial data load from Implementor
@@ -494,9 +502,10 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       className: "td",
       key: this.getName() + '_' + j,
       style: {
+        maxWidth: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px",
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
-    }, mappedData[mappedData2.name]) : null))) : offlineDataSortField != offlineDataState.sortField ? offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
+    }, !mappedData[mappedData2.name] || mappedData[mappedData2.name] === "" ? '\u00A0' : mappedData[mappedData2.name]) : null))) : offlineDataSortField != offlineDataState.sortField ? offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
       className: seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr",
       key: 'ContentTR_' + this.getName() + '_' + i,
       name: 'TableBodyTR_' + this.getName(),
@@ -510,8 +519,8 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       style: {
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
-    }, mappedData[mappedData2.name]) : null))) : offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
-      className: "tr",
+    }, !mappedData[mappedData2.name] || mappedData[mappedData2.name] === "" ? '\u00A0' : mappedData[mappedData2.name]) : null))) : offlineDataState.map((mappedData, i) => /*#__PURE__*/_react.default.createElement("div", {
+      className: seletedRowKey === 'ContentTR_' + this.getName() + '_' + i ? "trHighlighted" : "tr",
       key: this.getName() + '_' + this.getName() + '_' + i,
       name: 'TableBodyTR_' + this.getName(),
       onDoubleClick: this.executeOnDoubleClick.bind(this),
@@ -524,7 +533,7 @@ const TableComponent = (0, _ClassAdapter.default)(FormComponents, {
       style: {
         width: tableDataCellWidth === null ? "50px" : tableDataCellWidth + "px"
       }
-    }, mappedData[mappedData2.name]) : null)))));
+    }, !mappedData[mappedData2.name] || mappedData[mappedData2.name] === "" ? '\u00A0' : mappedData[mappedData2.name]) : null)))));
   }
 });
 

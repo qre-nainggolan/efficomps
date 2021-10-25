@@ -276,7 +276,7 @@ const TableComponent = ClassAdapter(FormComponents, {
             counter++;
             if (counter >= this.offlineData.length)
                 break
-        }
+        } 
 
         this.offlineData = newData;
         this.offlineData.sortField = sortField;
@@ -389,7 +389,7 @@ const TableComponent = ClassAdapter(FormComponents, {
                             key={'0_' + this.getName()}
                             name={'TableHeadTR_' + this.getName()}
                         >
-                        {
+                        { 
                             tableFields.map((mappedData, i) => ((mappedData.showHeader)
                             ?
                             (
@@ -419,7 +419,6 @@ const TableComponent = ClassAdapter(FormComponents, {
                                         setTableFields(tableFieldsTemp);
                                     }}
                                     onDragStart={() => {
-                                        console.log(mappedData.name);
                                         setDragSource(mappedData.name);
                                     }}
                                 >
@@ -436,9 +435,11 @@ const TableComponent = ClassAdapter(FormComponents, {
                                             }
                                             setOfflineDataState(this.getOfflineData(this.setOfflineData(offlineDataState, mappedData.name, offlineDataSortDirection)));
                                             setOfflineDataSortField(mappedData.name);
+                                            tableFields[i].nextSortDirection = tableFields[i].nextSortDirection === "DESC" ? "ASC" : "DESC";
+                                            setTableFields(tableFields);
                                         }}
                                     >
-                                        ^
+                                        {mappedData.name === offlineDataSortField ? (mappedData.nextSortDirection === "DESC" ? "\u02C5" : "^") : "-"}
                                     </div>
                                 </div>
                             )
