@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _ClassAdapter = _interopRequireDefault(require("./ClassAdapter"));
 
+var _reactRouterDom = require("react-router-dom");
+
 require("./CollaboratorComponent.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -44,7 +46,7 @@ const ContainerWrapper = (0, _ClassAdapter.default)(null, {
     return this.children || /*#__PURE__*/_react.default.createElement("div", null);
   },
   getLeftColumnClassname: function getLeftColumnClassname() {
-    return this.leftColumnStatus === "unhide" || !this.leftColumnStatus ? "EfficompsContainerLeftColumnUnhide" : "EfficompsContainerLeftColumnHide";
+    return this.leftColumnStatus || "EfficompsContainerLeftColumnFirstLoad";
   },
   setLeftColumnClassname: function setLeftColumnClassname(newClassname) {
     this.leftColumnStatus = newClassname;
@@ -55,9 +57,25 @@ const ContainerWrapper = (0, _ClassAdapter.default)(null, {
   getLeftColumn: function getLeftColumn() {
     return this.leftColumn || /*#__PURE__*/_react.default.createElement("div", null);
   },
+  getFullMenu: function getFullMenu(menu) {
+    let tempObj = [];
+    menu.map((mappedData, j) => mappedData.show ? tempObj.push( /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+      to: mappedData.target,
+      onMouseEnter: () => {
+        clearTimeout();
+      },
+      onMouseOut: () => {
+        clearTimeout();
+      }
+    }, mappedData.label)) : null);
+    return tempObj;
+  },
   renderContainer: function renderContainer() {
-    const [leftColumnClassnameState, setLeftColumnClassnameState] = (0, _react.useState)("EfficompsContainerLeftColumnUnhide");
-    const [contentColumnClassnameState, setContentColumnClassnameState] = (0, _react.useState)("EfficompsContainerContentColumn");
+    const [leftColumnClassnameState, setLeftColumnClassnameState] = (0, _react.useState)("EfficompsContainerLeftColumnFirstLoad");
+    const [contentColumnClassnameState, setContentColumnClassnameState] = (0, _react.useState)("EfficompsContainerContentColumnFirstLoad");
+    const [toggleButtonClassnameState, setToggleButtonClassnameState] = (0, _react.useState)("EfficompsLeftColumnToggleButtonUnhide");
+    const [menuContainerClassnameState, setMenuContainerClassnameState] = (0, _react.useState)("EfficompsLeftColumnMenuContainerFirstLoad");
+    const [menuListState, setMenuListState] = (0, _react.useState)(this.leftColumn);
     let timer;
     return /*#__PURE__*/_react.default.createElement("div", {
       className: "EfficompsContainerWrapper",
@@ -70,44 +88,69 @@ const ContainerWrapper = (0, _ClassAdapter.default)(null, {
         if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide") {
           timer = setTimeout(() => {
             setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
-            clearTimeout(timer);
+            setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
           }, 250);
         }
       },
       onMouseOut: () => {
         clearTimeout(timer);
+
+        if (leftColumnClassnameState === "EfficompsContainerLeftColumnHideHover") {
+          timer = setTimeout(() => {
+            setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
+            setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+          }, 250);
+        }
       }
-    }, /*#__PURE__*/_react.default.createElement("div", {
-      className: "EfficompsLeftColumnToggleButton",
+    }), /*#__PURE__*/_react.default.createElement("div", {
+      className: toggleButtonClassnameState,
       onMouseEnter: () => {
         clearTimeout(timer);
 
         if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide") {
           timer = setTimeout(() => {
             setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
-            clearTimeout(timer);
+            setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
           }, 250);
         }
       },
-      onClick: () => {
-        setLeftColumnClassnameState(leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" ? "EfficompsContainerLeftColumnHide" : "EfficompsContainerLeftColumnUnhide");
-        setContentColumnClassnameState(contentColumnClassnameState === "EfficompsContainerContentColumnWider" ? "EfficompsContainerContentColumn" : "EfficompsContainerContentColumnWider");
-        this.setLeftColumnClassname(leftColumnClassnameState);
-      }
-    }), /*#__PURE__*/_react.default.createElement("div", {
-      className: "EfficompsLeftColumnMenuContainer"
-    }, this.getLeftColumn())), /*#__PURE__*/_react.default.createElement("div", {
-      className: contentColumnClassnameState,
-      onMouseEnter: () => {
+      onMouseOut: () => {
         clearTimeout(timer);
 
         if (leftColumnClassnameState === "EfficompsContainerLeftColumnHideHover") {
           timer = setTimeout(() => {
             setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
-            clearTimeout(timer);
+            setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
           }, 250);
         }
+      },
+      onClick: () => {
+        clearTimeout(timer);
+        this.setLeftColumnClassname(leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" || leftColumnClassnameState === "EfficompsContainerLeftColumnFirstLoad" ? "EfficompsContainerLeftColumnHide" : "EfficompsContainerLeftColumnUnhide");
+        setToggleButtonClassnameState(this.getLeftColumnClassname() === "EfficompsContainerLeftColumnUnhide" ? "EfficompsLeftColumnToggleButtonUnhide" : "EfficompsLeftColumnToggleButton");
+        setLeftColumnClassnameState(leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" || leftColumnClassnameState === "EfficompsContainerLeftColumnFirstLoad" ? "EfficompsContainerLeftColumnHide" : "EfficompsContainerLeftColumnUnhide");
+        setTimeout(() => {
+          setContentColumnClassnameState(this.getLeftColumnClassname() === "EfficompsContainerLeftColumnUnhide" ? "EfficompsContainerContentColumn" : "EfficompsContainerContentColumnWider");
+        }, 250);
       }
+    }), /*#__PURE__*/_react.default.createElement("div", {
+      className: leftColumnClassnameState === "EfficompsContainerLeftColumnHide" ? "EfficompsLeftColumnMenuContainerHide" : "EfficompsLeftColumnMenuContainerUnhide",
+      onMouseEnter: () => {
+        clearTimeout(timer);
+      },
+      onMouseOut: () => {
+        clearTimeout(timer);
+      }
+    }, leftColumnClassnameState === "EfficompsContainerLeftColumnHide" ? menuListState.map((mappedData, j) => mappedData.show ? /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+      to: mappedData.target,
+      onMouseEnter: () => {
+        clearTimeout(timer);
+      },
+      onMouseOut: () => {
+        clearTimeout(timer);
+      }
+    }, mappedData.label.substring(0, 1)) : null) : this.getFullMenu(menuListState)), /*#__PURE__*/_react.default.createElement("div", {
+      className: contentColumnClassnameState
     }, this.getChildren()));
   }
 });
