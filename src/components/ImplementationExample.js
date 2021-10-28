@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { actionCreatorsGeneralInfo } from '../store/GeneralInfo';
 import { Button, ModalBody, ModalFooter, Row } from 'reactstrap';
 import './Button.css';
 
-import { GenerateInputText, GenerateButton, GenerateNotificationPopup, GenerateInputGroup, TableWrapper, FormModalWrapper } from 'efficomps';
-import { HTTPProxy } from 'efficomps';
-import { DataModelling } from 'efficomps';
-import './CollaboratorComponent.css';
+import { GenerateInputText, GenerateButton, GenerateNotificationPopup, GenerateInputGroup, TableWrapper, FormModalWrapper } from '../collaborator/FormComponents';
+import { HTTPProxy } from '../collaborator/HttpProxy';
+import { DataModelling } from '../collaborator/DataModelling';
+import '../collaborator/CollaboratorComponent.css';
 
 class ImplementationExample extends Component {
 
@@ -190,7 +191,7 @@ class ImplementationExample extends Component {
 
     render() {
         return (
-            <div style={{margin:'4px 0 0 4px'}}>
+            <div>
                 <FormModalWrapper
                     className={''}
                     headerTitle={'Form Transaksi Masuk'}
@@ -295,63 +296,61 @@ class ImplementationExample extends Component {
                         <Button color="secondary" onClick={this.toggleCommodity}>Cancel</Button>
                     </ModalFooter>
                 </FormModalWrapper>
-                <Row>
-                    <GenerateNotificationPopup
-                        className={''}
-                        headerTitle={'Form Transaksi Keluar'}
-                        bodyHeaderText={'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}
-                        onToggleMethod={this.toggleExitTransaction}
-                        name={'ExitForm'}
-                        isOpen={this.state.modalExitTransaction}
-                    />
-                    <GenerateNotificationPopup
-                        className={''}
-                        headerTitle={'Form Cetak'}
-                        bodyHeaderText={'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}
-                        onToggleMethod={this.togglePrintTransaction}
-                        name={'CetakForm'}
-                        isOpen={this.state.modalPrintTransaction}
-                    />
-                    <GenerateNotificationPopup
-                        className={''}
-                        headerTitle={'Timbang Berat'}
-                        bodyHeaderText={'10,000'}
-                        onToggleMethod={this.toggleTimbang}
-                        name={'TimbangBerat'}
-                        isOpen={this.state.modalTimbang}
-                    />
-                    <GenerateButton
-                        className={'btn btn-primary'}
-                        name={'ButtonComponent'}
-                        clickMethod={this.toggle}
-                        directStyle={{ marginLeft: '13px', marginRight: '2px' }} 
-                        label={"Masuk"}
-                    />
-                    <GenerateButton
-                        className={'btn btn-primary'}
-                        name={'ButtonComponent'}
-                        clickMethod={this.toggleExitTransaction}
-                        directStyle={{ marginLeft: '2px', marginRight: '2px' }}
-                        label={"Keluar"}
-                    />
-                    <GenerateButton
-                        className={'btn btn-primary'}
-                        name={'ButtonComponent'}
-                        clickMethod={this.togglePrintTransaction}
-                        directStyle={{ marginLeft: '2px', marginRight: '2px' }} 
-                        label={"Cetak Tiket"}
-                    />
-                    <GenerateInputText
-                        className={'btn btn-primary'}
-                        name={'InputTextComponent'}
-                        changeMethod={this.textChanged}
-                        label={"Tikets"}
-                        directStyle={{ marginLeft: '5px', width: '350px', borderRadius: '3px', borderWidth: '1px' }}
-                        placeholder={"@Kata Kunci Pencarian"}
-                        label={"OK"}
-                        value={this.state.value}
-                    />
-                </Row>
+                <GenerateNotificationPopup
+                    className={''}
+                    headerTitle={'Form Transaksi Keluar'}
+                    bodyHeaderText={'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}
+                    onToggleMethod={this.toggleExitTransaction}
+                    name={'ExitForm'}
+                    isOpen={this.state.modalExitTransaction}
+                />
+                <GenerateNotificationPopup
+                    className={''}
+                    headerTitle={'Form Cetak'}
+                    bodyHeaderText={'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'}
+                    onToggleMethod={this.togglePrintTransaction}
+                    name={'CetakForm'}
+                    isOpen={this.state.modalPrintTransaction}
+                />
+                <GenerateNotificationPopup
+                    className={''}
+                    headerTitle={'Timbang Berat'}
+                    bodyHeaderText={'10,000'}
+                    onToggleMethod={this.toggleTimbang}
+                    name={'TimbangBerat'}
+                    isOpen={this.state.modalTimbang}
+                />
+                <GenerateButton
+                    className={'btn btn-primary'}
+                    name={'ButtonComponent'}
+                    clickMethod={this.toggle}
+                    directStyle={{ marginLeft: '13px', marginRight: '2px' }} 
+                    label={"Masuk"}
+                />
+                <GenerateButton
+                    className={'btn btn-primary'}
+                    name={'ButtonComponent'}
+                    clickMethod={this.toggleExitTransaction}
+                    directStyle={{ marginLeft: '2px', marginRight: '2px' }}
+                    label={"Keluar"}
+                />
+                <GenerateButton
+                    className={'btn btn-primary'}
+                    name={'ButtonComponent'}
+                    clickMethod={this.togglePrintTransaction}
+                    directStyle={{ marginLeft: '2px', marginRight: '2px' }} 
+                    label={"Cetak Tiket"}
+                />
+                <GenerateInputText
+                    className={'btn btn-primary'}
+                    name={'InputTextComponent'}
+                    changeMethod={this.textChanged}
+                    label={"Tikets"}
+                    directStyle={{ marginLeft: '5px', width: '350px', borderRadius: '3px', borderWidth: '1px' }}
+                    placeholder={"@Kata Kunci Pencarian"}
+                    label={"OK"}
+                    value={this.state.value}
+                />
                 <TableWrapper
                     fields={this.BongkarMuatDataModel}
                     data={this.state.listBongkarMuat}
