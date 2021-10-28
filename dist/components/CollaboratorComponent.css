@@ -118,7 +118,7 @@ body {
     bottom: 0;
     border-right: 1px inset #ccc;
     border-top-right-radius: 3px;
-    background: #f9f3ff;
+    background: #150157;
     width: 207px;
     margin: 0px;
     z-index: 1000;
@@ -130,7 +130,9 @@ body {
     bottom: 0;
     border-right: 1px inset #ccc;
     border-top-right-radius: 3px;
-    background: #f9f3ff;
+    background-color: #150157;
+    color: #fff;
+    font-weight: bold;
     width: 45px;
     margin-left: 0px;
     z-index: 1001;
@@ -153,7 +155,7 @@ body {
     bottom: 0;
     border-right: 1px inset #ccc;
     border-top-right-radius: 3px;
-    background: #f9f3ff;
+    background: #150157;
     width: 207px;
     margin: 0px;
     z-index: 1000;
@@ -267,8 +269,9 @@ body {
     margin-top: 44px;
     z-index: 1002;
     width: 207px;
+    border-radius:2px;
     text-indent: 2px;
-    line-height: 2.5;
+    line-height: 2.5px;
     animation: menuContainerOut 0.5s 0s;
 }
 
@@ -283,10 +286,11 @@ body {
 }
 
 .EfficompsLeftColumnMenuContainerFirstLoad a, .EfficompsLeftColumnMenuContainerUnhide a {
-    border-bottom: 1px inset #ccc;
+    border-bottom: 1px inset #4c626d;
     width: 100%;
     float: left;
     width: 203px;
+    color: #f5f0f0;
     margin-left: 1px;
     margin-right: 1px;
     animation: menuContainerOutA 0.5s 0s;
@@ -308,7 +312,9 @@ body {
     margin-top: 44px;
     z-index: 1002;
     width: 45px;
-    text-align:center;
+    color: #f5f0f0;
+    font-weight: bold;
+    text-align: center;
     line-height: 2.5;
     animation: menuContainerIn 0.5s 0s;
 }
@@ -324,10 +330,11 @@ body {
 }
 
 .EfficompsLeftColumnMenuContainerHide a {
-    border-bottom: 1px inset #ccc;
+    border-bottom: 1px inset #4c626d;
     width: 100%;
     float: left;
-    width: 41px;
+    color:#f5f0f0;
+    width: 40px;
     margin-left: 1px;
     margin-right: 1px;
     animation: menuContainerInA 0.5s 0s;
@@ -339,6 +346,51 @@ body {
     }
 
     to {
-        width: 41px;
+        width: 40px;
     }
+}
+
+.MenuListState, .MenuListStateFirstChildren {
+    position: absolute;
+    border: 1px solid #e1dada;
+    z-index: 1003;
+    left: 1px;
+    width: 203px;
+    height: 42px;
+    color: #f5f0f0;
+    border-bottom: 1px inset #ccc;
+    background-color: #ccc;
+}
+
+.MenuListState {
+    text-indent: 5px;
+    line-height: 2.5;
+    animation: menuContainerOutA 0.5s 0s;
+}
+
+.MenuListStateHide {
+    background-color: #ccc;
+    position: absolute;
+    z-index: 1003;
+    left: 2px;
+    width: 40px;
+    border-radius: 2px;
+    line-height: 2.5;
+    height: 40px;
+    border-bottom: 1px inset #ccc;
+    z-index: 1002;
+    color: #f5f0f0;
+    font-weight: bold;
+    text-align: center;
+    animation: menuContainerInA 0.5s 0s;
+}
+
+.MenuListStateHide:hover, .MenuListState:hover {
+    cursor: pointer;
+}
+
+.MenuListStateFirstChildren {
+    text-indent: 10px;
+    font-size: smaller;
+    line-height: 3;
 }
