@@ -1,6 +1,7 @@
 body {
     background-color: #fffeff;
 }
+
 .CollaboratorTable {
     font-size: 11px;
     padding: 0;
@@ -81,11 +82,11 @@ body {
 }
 
 .CollaboratorTable .tbody .trHighlighted {
-    float: left;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-bottom: 1px solid #ccc;
-    background-color: #e7f5ff;
+float: left;
+width: 100% !important;
+max-width: 100% !important;
+border-bottom: 1px solid #ccc;
+background-color: #e7f5ff;
 }
 
 .CollaboratorTable .tbody .trHighlighted .td {
@@ -103,10 +104,10 @@ body {
 .EfficompsContainerWrapper {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
     border: 0;
     position: absolute;
     background: #f9f3ff;
@@ -212,6 +213,49 @@ body {
     }
 }
 
+.EfficompsLeftColumnToggleButtonPad {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 207px;
+    height: 44px;
+    background-color: #005db6;
+    border-bottom: 1px inset #869ed8;
+    animation: toggleButtonPadOut 0.5s 0s;
+    z-index: 1009;
+}
+
+.EfficompsLeftColumnToggleButtonPadHide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 44px;
+    width: 40px;
+    background-color: #005db6;
+    animation: toggleButtonPadIn 0.5s 0s;
+    z-index: 1009;
+}
+
+@keyframes toggleButtonPadIn {
+    from {
+        width: 207px;
+    }
+
+    to {
+        width: 40px;
+    }
+}
+
+@keyframes toggleButtonPadOut {
+    from {
+        width: 40px;
+    }
+
+    to {
+        width: 207px;
+    }
+}
+
 .EfficompsLeftColumnToggleButton {
     position: absolute;
     top: 1px;
@@ -219,7 +263,7 @@ body {
     height: 40px;
     width: 40px;
     animation: toggleButtonIn 0.5s 0s;
-    z-index: 1001;
+    z-index: 1010;
 }
 
 @keyframes toggleButtonIn {
@@ -239,7 +283,7 @@ body {
     height: 40px;
     width: 40px;
     animation: toggleButtonOut 0.5s 0s;
-    z-index: 1001;
+    z-index: 1010;
 }
 
 @keyframes toggleButtonOut {
@@ -258,10 +302,10 @@ body {
     border: 1px outset #f9f3ff;
 }
 
-.EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
-    cursor: pointer;
-    background-color: limegreen;
-}
+    .EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
+        cursor: pointer;
+        background-color: limegreen;
+    }
 
 .EfficompsLeftColumnMenuContainerFirstLoad, .EfficompsLeftColumnMenuContainerUnhide {
     position: absolute;
@@ -333,7 +377,7 @@ body {
     border-bottom: 1px inset #4c626d;
     width: 100%;
     float: left;
-    color:#f5f0f0;
+    color: #f5f0f0;
     width: 40px;
     margin-left: 1px;
     margin-right: 1px;
@@ -344,6 +388,7 @@ body {
     from {
         width: 203px;
     }
+
     to {
         width: 40px;
     }
@@ -384,7 +429,7 @@ body {
     animation: menuContainerInA 0.5s 0s;
 }
 
-.MenuListStateHide:hover, .MenuListState:hover, .MenuListStateFirstChildren:hover,.MenuListStateGrandChildren:hover {
+.MenuListStateHide:hover, .MenuListState:hover, .MenuListStateFirstChildren:hover, .MenuListStateGrandChildren:hover {
     cursor: pointer;
     text-decoration: none;
     background-color: #22d414;
@@ -407,23 +452,23 @@ body {
 
 .EfficompsLeftColumnProgressBarContainer {
     position: fixed;
-    z-index: 1004;
     background: rgba(255, 255, 255, 0.05);
     top: 0;
     left: 196px;
     bottom: 0;
     width: 10px;
+    z-index: 1011;
 }
 
 .EfficompsLeftColumnProgressBar {
-    top: 0;
+    top: 200px;
     left: 196px;
     width: 10px;
-    z-index: 1005;
     position: absolute;
     will-change: transform, opacity;
     background: linear-gradient(to top, violet, red);
     transform-origin: top center;
     transform: scale(1, 0);
-    opacity: 0;
+    opacity: 1.0;
+    z-index: 1012;
 }

@@ -1,11 +1,11 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ClassAdapter from './ClassAdapter';
 import { Link } from 'react-router-dom';
 import './CollaboratorComponent.css';
 
 const ContainerWrapper = ClassAdapter(null, {
-    __init: function (){
-        for (let i in arguments[0]){ this[i] = arguments[0][i]; }
+    __init: function () {
+        for (let i in arguments[0]) { this[i] = arguments[0][i]; }
 
         this.marginTop = 0;
 
@@ -57,11 +57,13 @@ const ContainerWrapper = ClassAdapter(null, {
     },
     renderContainer: function () {
         const [leftColumnClassnameState, setLeftColumnClassnameState] = useState("EfficompsContainerLeftColumnFirstLoad");
+        const [toggleButtonPadClassnameState, setToggleButtonPadClassnameState] = useState("EfficompsLeftColumnToggleButtonPad");
         const [contentColumnClassnameState, setContentColumnClassnameState] = useState("EfficompsContainerContentColumnFirstLoad");
         const [toggleButtonClassnameState, setToggleButtonClassnameState] = useState("EfficompsLeftColumnToggleButtonUnhide");
         const [menuListState, setMenuListState] = useState(this.leftColumn);
         const [heightOfLeftColumnState, setHeightOfLeftColumnState] = useState(0)
-        const [browserCanvasHeightState, setBrowserCanvasHeightState] = useState(this.browserCanvasHeight)
+        const [browserCanvasHeightState, setBrowserCanvasHeightState] = useState(this.browserCanvasHeight);
+        const [scrollPositionState, setScrollPositionState] = useState(0);
 
         let timer;
         let initialMarginTop = 44; // Height of box of main menu item
@@ -98,7 +100,7 @@ const ContainerWrapper = ClassAdapter(null, {
             <div
                 className="EfficompsContainerWrapper"
                 name={"EfficompsContainerWrapper_" + this.getName()}
-                style={{ height: { heightOfLeftColumnState } + 'px' }}
+                style={{ height: { browserCanvasHeightState } + 'px', overflowY: 'hidden' }}
             >
                 <div
                     className="EfficompsLeftColumnProgressBarContainer"
@@ -137,12 +139,38 @@ const ContainerWrapper = ClassAdapter(null, {
                             :
                             (
                                 parseInt(heightOfLeftColumnState) > parseInt(browserCanvasHeightState)
-                                ?
-                                    { height: heightOfLeftColumnState + 'px', overflow: '-moz-scrollbars-none', scrollbarWidth:'none' }
-                                : 
-                                    { height: heightOfLeftColumnState + 'px' }
+                                    ?
+                                    { height: browserCanvasHeightState + 'px', overflow: '-moz-scrollbars-none', scrollbarWidth: 'none' }
+                                    :
+                                    { height: browserCanvasHeightState + 'px' }
                             )
                     }
+                >
+                </div>
+                <div
+                    className={toggleButtonPadClassnameState}
+                    onMouseEnter={() => {
+                        clearTimeout(timer);
+                        if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide") {
+                            timer = setTimeout(() => {
+                                setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
+                                setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                setContentColumnClassnameState("EfficompsContainerContentColumn");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
+                            }, 250);
+                        }
+                    }}
+                    onMouseOut={() => {
+                        clearTimeout(timer);
+                        if (leftColumnClassnameState === "EfficompsContainerLeftColumnHideHover") {
+                            timer = setTimeout(() => {
+                                setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
+                                setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                setContentColumnClassnameState("EfficompsContainerContentColumnWider");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
+                            }, 250)
+                        }
+                    }}
                 >
                 </div>
                 <div
@@ -154,6 +182,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
                                 setContentColumnClassnameState("EfficompsContainerContentColumn");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                             }, 250);
                         }
                     }}
@@ -164,6 +193,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
                                 setContentColumnClassnameState("EfficompsContainerContentColumnWider");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                             }, 250)
                         }
                     }}
@@ -171,6 +201,7 @@ const ContainerWrapper = ClassAdapter(null, {
                         clearTimeout(timer);
                         this.setLeftColumnClassname(leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" || leftColumnClassnameState === "EfficompsContainerLeftColumnFirstLoad" ? "EfficompsContainerLeftColumnHide" : "EfficompsContainerLeftColumnUnhide");
                         setToggleButtonClassnameState(this.getLeftColumnClassname() === "EfficompsContainerLeftColumnUnhide" ? "EfficompsLeftColumnToggleButtonUnhide" : "EfficompsLeftColumnToggleButton");
+                        setToggleButtonPadClassnameState(this.getLeftColumnClassname() === "EfficompsContainerLeftColumnUnhide" ? "EfficompsLeftColumnToggleButtonPad" : "EfficompsLeftColumnToggleButtonPadHide");
 
                         setLeftColumnClassnameState(leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" || leftColumnClassnameState === "EfficompsContainerLeftColumnFirstLoad" ? "EfficompsContainerLeftColumnHide" : "EfficompsContainerLeftColumnUnhide");
                         setTimeout(() => {
@@ -181,54 +212,84 @@ const ContainerWrapper = ClassAdapter(null, {
                 </div>
                 {
                     (leftColumnClassnameState === "EfficompsContainerLeftColumnHide")
-                    ?
+                        ?
                         menuListState.map((mappedData, j) => ((mappedData.show)
                             ?
-                                (
-                                    <div
-                                        className="MenuListStateHide"
-                                        key={"menuListState2_" + j}
-                                        style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + 'px') }}
-                                        onMouseEnter={() => {
-                                            if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide") {
-                                                timer = setTimeout(() => {
-                                                    setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
-                                                    setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
-                                                    setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                                }, 250);
+                            (
+                                <div
+                                    className="MenuListStateHide"
+                                    key={"menuListState2_" + j}
+                                    style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + 'px'), overflowY: 'hidden' }}
+                                    onMouseEnter={() => {
+                                        clearTimeout(timer);
+                                        if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide") {
+                                            timer = setTimeout(() => {
+                                                setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
+                                                setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                                setContentColumnClassnameState("EfficompsContainerContentColumn");
+                                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
+                                            }, 250);
+                                        }
+                                    }}
+                                    onMouseOut={() => {
+                                        clearTimeout(timer);
+                                        if (leftColumnClassnameState === "EfficompsContainerLeftColumnHideHover") {
+                                            timer = setTimeout(() => {
+                                                setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
+                                                setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                                setContentColumnClassnameState("EfficompsContainerContentColumnWider");
+                                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
+                                            }, 250)
+                                        }
+                                    }}
+                                    onWheel={(e) => {
+                                        // Wheel up will make deltaY as positive number, wheel up will make deltaY as negative number
+                                        if (browserCanvasHeightState < heightOfLeftColumnState || scrollPositionState !== 0) {
+                                            if (e.deltaY < 0) {
+                                                if (scrollPositionState >= (browserCanvasHeightState - heightOfLeftColumnState)) {
+                                                    setScrollPositionState(scrollPositionState + e.deltaY);
+                                                }
+                                            } else {
+                                                if (scrollPositionState <= -20)
+                                                    setScrollPositionState(scrollPositionState + e.deltaY);
                                             }
-                                        }}
-                                        onMouseOut={() => {
-                                            clearTimeout(timer);
-                                            if (leftColumnClassnameState === "EfficompsContainerLeftColumnHideHover") {
-                                                timer = setTimeout(() => {
-                                                    setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
-                                                    setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
-                                                    setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                                }, 250)
-                                            }
-                                        }}
-                                    >
-                                        {mappedData.label.substring(0, 1)}
-                                    </div>
-                                )
+                                        }
+                                    }}
+                                >
+                                    {mappedData.label.substring(0, 1)}
+                                </div>
+                            )
                             :
                             null
-                            )
+                        )
                         ) // end of looping menuListState.map((...
-                    :
+                        :
                         menuListState.map((mappedData, j) => ((mappedData.show)
-                        ?
-                            (mappedData.childMenu)
                             ?
+                            (mappedData.childMenu)
+                                ?
                                 (
                                     <div
-                                        key={"menuListState_" + j}
+                                        onWheel={(e) => {
+                                            // Wheel up will make deltaY as positive number, wheel up will make deltaY as negative number
+                                            if (browserCanvasHeightState < heightOfLeftColumnState || scrollPositionState !== 0) {
+                                                if (e.deltaY < 0) {
+                                                    if (scrollPositionState >= (browserCanvasHeightState - heightOfLeftColumnState)) {
+                                                        setScrollPositionState(scrollPositionState + e.deltaY);
+                                                    }
+                                                } else {
+                                                    if (scrollPositionState <= -20)
+                                                        setScrollPositionState(scrollPositionState + e.deltaY);
+                                                }
+                                            }
+                                            console.log(scrollPositionState)
+                                        }}
+                                        style={{ overflowY: 'hidden' }}
                                     >
                                         <Link
                                             className="MenuListState"
                                             key={"menuListStateLink_" + j}
-                                            style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + 'px') }}
+                                            style={{ marginTop: ((this.setAndGetMarginTop(initialMarginTop) + scrollPositionState) + 'px') }}
                                             to={mappedData.target}
                                             onMouseEnter={() => {
                                                 clearTimeout(timer);
@@ -237,6 +298,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                                         setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                         setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
                                                         setContentColumnClassnameState("EfficompsContainerContentColumn");
+                                                        setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                                     }, 250);
                                                 }
                                             }}
@@ -247,6 +309,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                                         setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                         setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
                                                         setContentColumnClassnameState("EfficompsContainerContentColumnWider");
+                                                        setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                                     }, 250)
                                                 }
                                             }}
@@ -271,14 +334,17 @@ const ContainerWrapper = ClassAdapter(null, {
                                         </Link>
                                         {
                                             (mappedData.displayChild)
-                                            ?
+                                                ?
                                                 mappedData.childMenu.map((mappedData2, k) => (
                                                     ((mappedData2.show) && mappedData.displayChild === true)
-                                                    ?
-                                                        <div key={"menuListState3_" + k}>
+                                                        ?
+                                                        <div
+                                                            key={"menuListState3_" + k}
+                                                            style={{ overflowY: 'hidden' }}
+                                                        >
                                                             <Link
                                                                 className="MenuListStateFirstChildren"
-                                                                style={{ marginTop: (this.setAndGetMarginTop(childHeight) + 'px') }}
+                                                                style={{ marginTop: ((this.setAndGetMarginTop(childHeight) + scrollPositionState) + 'px') }}
                                                                 to={mappedData2.target}
                                                                 key={"menuListStateLink3_" + k}
                                                                 onMouseEnter={() => {
@@ -288,6 +354,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
                                                                             setContentColumnClassnameState("EfficompsContainerContentColumn");
+                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                                                         }, 250);
                                                                     }
                                                                 }}
@@ -298,6 +365,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
                                                                             setContentColumnClassnameState("EfficompsContainerContentColumnWider");
+                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                                                         }, 250)
                                                                     }
                                                                 }}
@@ -328,14 +396,14 @@ const ContainerWrapper = ClassAdapter(null, {
                                                             </Link>
                                                             {
                                                                 (mappedData2.displayChild)
-                                                                ?
+                                                                    ?
                                                                     mappedData2.childMenu.map((mappedData3, k) => (
                                                                         ((mappedData3.show) && mappedData2.displayChild === true)
-                                                                        ?
+                                                                            ?
                                                                             <Link
                                                                                 to={mappedData3.target}
                                                                                 className="MenuListStateGrandChildren"
-                                                                                style={{ marginTop: (this.setAndGetMarginTop(childHeight) + 'px') }}
+                                                                                style={{ marginTop: ((this.setAndGetMarginTop(childHeight) + scrollPositionState) + 'px') }}
                                                                                 key={"menuListState4_" + k}
                                                                                 onMouseEnter={() => {
                                                                                     clearTimeout(timer);
@@ -360,36 +428,36 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                             >
                                                                                 {mappedData3.label}
                                                                             </Link>
-                                                                        :
+                                                                            :
                                                                             null
                                                                     ))
-                                                                :
-                                                                null
+                                                                    :
+                                                                    null
                                                             }
                                                         </div>
-                                                    :
-                                                    null
+                                                        :
+                                                        null
                                                 ))
-                                            :
+                                                :
                                                 null
                                         }
                                     </div>
                                 )
-                            :
+                                :
                                 (
                                     <Link
                                         className="MenuListState"
-                                        style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + 'px') }}
+                                        style={{ marginTop: ((this.setAndGetMarginTop(initialMarginTop) + scrollPositionState) + 'px') }}
                                         to={mappedData.target}
                                         key={"menuListState5_" + j}
                                         onMouseEnter={() => {
                                             clearTimeout(timer);
-                                            if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide")
-                                            {
+                                            if (leftColumnClassnameState === "EfficompsContainerLeftColumnHide") {
                                                 timer = setTimeout(() => {
                                                     setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                     setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
                                                     setContentColumnClassnameState("EfficompsContainerContentColumn");
+                                                    setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                                 }, 250);
                                             }
                                         }}
@@ -400,9 +468,10 @@ const ContainerWrapper = ClassAdapter(null, {
                                                     setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                     setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
                                                     setContentColumnClassnameState("EfficompsContainerContentColumnWider");
+                                                    setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                                 }, 250)
                                             }
-                                        }} 
+                                        }}
                                         onClick={() => {
                                             let newMenuListTemp = [];
                                             let tempMenuItem;
@@ -423,7 +492,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                         {'\u281B'}{'\u00A0'}{mappedData.label}
                                     </Link>
                                 )
-                        :
+                            :
                             null
                         ))
                 }
