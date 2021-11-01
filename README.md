@@ -52,6 +52,49 @@ Some snippets:
         width={'350px'}
     />
 
+To build left navigation on layout, Menu items are specified in JSON format to make the setup is more configureable
+
+    <ContainerComponent
+        leftColumn={[
+            { name: 'home', label: 'Home', target: '/', show: true },
+            {
+                name: 'transaksi',
+                label: 'Transaksi',
+                target: '#',
+                show: true,
+                childMenu: [
+                    { name: '11', label: 'Timbang Muat', target: '/transaksiTimbangMuat', show: true }, 
+                    { name: '12', label: 'Bongkar Muat', target: '/transaksiTimbangMuat', show: true }, 
+                    {
+                        name: '22',
+                        label: 'Timbang JANKOS',
+                        target: '#',
+                        show: true,
+                        childMenu: [{
+                            name: '10',
+                            label: 'Kendaraan Kebun',
+                            target: '/transaksiTimbangMuat',
+                            show: true
+                        }, {
+                            name: '9',
+                            label: 'Kendaraan Kontrak',
+                            target: '/transaksiTimbangMuat',
+                            show: true
+                        }, {
+                            name: '8',
+                            label: 'Kendaraan Umum',
+                            target: '/transaksiTimbangMuat',
+                            show: true
+                        }]
+                    }, 
+                    { name: '21', label: 'Daftar Timbangan', target: '#', show: true }
+                ]
+            },
+            { name: 'counter', label: 'Master Data', target: '/counter', show: true }
+        ]}
+    >
+        {props.children}
+    </ContainerComponent>
 
 
-![Weighbridge_FE - Google Chrome 2021-10-25 11-49-22](https://user-images.githubusercontent.com/940036/138637437-53072117-4898-446b-a700-00a411cc25eb.gif)
+![Weighbridge_FE - Google Chrome 2021-11-01 20-35-50](https://user-images.githubusercontent.com/940036/139715076-0220f767-9483-4df7-a25a-40bea7f9e3af.gif)
