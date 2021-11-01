@@ -118,6 +118,7 @@ const ContainerWrapper = ClassAdapter(null, {
                             timer = setTimeout(() => {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                 setContentColumnClassnameState("EfficompsContainerContentColumn");
                             }, 250);
                         }
@@ -128,6 +129,7 @@ const ContainerWrapper = ClassAdapter(null, {
                             timer = setTimeout(() => {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                 setContentColumnClassnameState("EfficompsContainerContentColumnWider");
                             }, 250)
                         }
@@ -145,6 +147,22 @@ const ContainerWrapper = ClassAdapter(null, {
                                     { height: browserCanvasHeightState + 'px' }
                             )
                     }
+                    onWheel={(e) => {
+                        // Wheel up will make deltaY as positive number, wheel up will make deltaY as negative number
+                        if (browserCanvasHeightState < heightOfLeftColumnState || scrollPositionState !== 0) {
+                            if (e.deltaY < 0) {
+                                if (scrollPositionState >= (browserCanvasHeightState - heightOfLeftColumnState)) {
+                                    setScrollPositionState(scrollPositionState + e.deltaY);
+                                }
+                            } else {
+                                if (scrollPositionState <= -20)
+                                    setScrollPositionState(scrollPositionState + e.deltaY);
+                            }
+                        }
+                        if (e.deltaY < 0 && scrollPositionState > 0 || e.deltaY > 0 && scrollPositionState < 0) {
+                            setScrollPositionState(0);
+                        }
+                    }}
                 >
                 </div>
                 <div
@@ -155,8 +173,8 @@ const ContainerWrapper = ClassAdapter(null, {
                             timer = setTimeout(() => {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                 setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                             }, 250);
                         }
                     }}
@@ -166,8 +184,8 @@ const ContainerWrapper = ClassAdapter(null, {
                             timer = setTimeout(() => {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                 setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                             }, 250)
                         }
                     }}
@@ -181,8 +199,8 @@ const ContainerWrapper = ClassAdapter(null, {
                             timer = setTimeout(() => {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                 setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                             }, 250);
                         }
                     }}
@@ -192,8 +210,8 @@ const ContainerWrapper = ClassAdapter(null, {
                             timer = setTimeout(() => {
                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                 setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                             }, 250)
                         }
                     }}
@@ -226,8 +244,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                             timer = setTimeout(() => {
                                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                                 setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                             }, 250);
                                         }
                                     }}
@@ -237,8 +255,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                             timer = setTimeout(() => {
                                                 setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                 setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                                 setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                                setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                             }, 250)
                                         }
                                     }}
@@ -253,6 +271,9 @@ const ContainerWrapper = ClassAdapter(null, {
                                                 if (scrollPositionState <= -20)
                                                     setScrollPositionState(scrollPositionState + e.deltaY);
                                             }
+                                        }
+                                        if (e.deltaY < 0 && scrollPositionState > 0 || e.deltaY > 0 && scrollPositionState < 0) {
+                                            setScrollPositionState(0);
                                         }
                                     }}
                                 >
@@ -282,7 +303,9 @@ const ContainerWrapper = ClassAdapter(null, {
                                                         setScrollPositionState(scrollPositionState + e.deltaY);
                                                 }
                                             }
-                                            console.log(scrollPositionState)
+                                            if (e.deltaY < 0 && scrollPositionState > 0 || e.deltaY > 0 && scrollPositionState < 0) {
+                                                setScrollPositionState(0);
+                                            }
                                         }}
                                         style={{ overflowY: 'hidden' }}
                                     >
@@ -297,8 +320,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                                     timer = setTimeout(() => {
                                                         setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                         setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                                        setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                                         setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                                        setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                                     }, 250);
                                                 }
                                             }}
@@ -308,8 +331,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                                     timer = setTimeout(() => {
                                                         setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                         setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                                        setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                                         setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                                        setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                                     }, 250)
                                                 }
                                             }}
@@ -353,8 +376,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                         timer = setTimeout(() => {
                                                                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                                                             setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                                                         }, 250);
                                                                     }
                                                                 }}
@@ -364,8 +387,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                         timer = setTimeout(() => {
                                                                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                                                             setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                                                         }, 250)
                                                                     }
                                                                 }}
@@ -411,6 +434,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                                         timer = setTimeout(() => {
                                                                                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                                                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                                                                             setContentColumnClassnameState("EfficompsContainerContentColumn");
                                                                                         }, 250);
                                                                                     }
@@ -421,6 +445,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                                                                         timer = setTimeout(() => {
                                                                                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                                                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                                                                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                                                                             setContentColumnClassnameState("EfficompsContainerContentColumnWider");
                                                                                         }, 250)
                                                                                     }
@@ -456,8 +481,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                                 timer = setTimeout(() => {
                                                     setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                                                     setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
+                                                    setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
                                                     setContentColumnClassnameState("EfficompsContainerContentColumn");
-                                                    setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                                                 }, 250);
                                             }
                                         }}
@@ -467,8 +492,8 @@ const ContainerWrapper = ClassAdapter(null, {
                                                 timer = setTimeout(() => {
                                                     setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                                                     setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
+                                                    setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
                                                     setContentColumnClassnameState("EfficompsContainerContentColumnWider");
-                                                    setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                                                 }, 250)
                                             }
                                         }}
