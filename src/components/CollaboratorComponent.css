@@ -1,7 +1,10 @@
+body {
+    background-color: #fffeff;
+}
 .CollaboratorTable {
-    margin-top: 10px !important;
     font-size: 11px;
     padding: 0;
+    background-color: #efeaf3;
     margin: 0;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
@@ -29,15 +32,15 @@
     border-bottom: 1px solid #ccc;
     background-color: #e6e2ee;
     font-weight: bold;
-    border-left:1px solid #ccc;
-    border-right:0px solid #88d1fb;
+    border-left: 1px solid #ccc;
+    border-right: 0px solid #88d1fb;
 }
 
 .CollaboratorTable .thead .tr .td {
     position: relative;
     float: left;
-    border-right:1px inset #ccc;
-    line-height:2.5;
+    border-right: 1px inset #ccc;
+    line-height: 2.5;
     padding: 0 1px 0 1.5px;
     margin: 0 1px 0 1.5px;
 }
@@ -54,7 +57,7 @@
 .CollaboratorTable .tbody {
     width: 100% !important;
     max-width: 100% !important;
-    border-left:1px solid #ccc;
+    border-left: 1px solid #ccc;
     overflow-y: scroll;
 }
 
@@ -67,12 +70,11 @@
 
 .CollaboratorTable .tbody .tr .td, .CollaboratorTable .tbody .trNormal .td {
     float: left;
-    border-right:0px inset #ccc;
-    line-height:2;
+    border-right: 0px inset #ccc;
+    line-height: 2;
     padding: 0 1px 0 1.5px;
     margin: 0 1px 0 1.5px;
 }
-
 
 .CollaboratorTable .tbody .tr:hover, .CollaboratorTable .tbody .trNormal:hover {
     background-color: #e7f5ff !important;
@@ -88,8 +90,8 @@
 
 .CollaboratorTable .tbody .trHighlighted .td {
     float: left;
-    line-height:2;
-    border-right:0px inset #ccc;
+    line-height: 2;
+    border-right: 0px inset #ccc;
     padding: 0 1px 0 1.5px;
     margin: 0 1px 0 1.5px;
 }
@@ -101,9 +103,24 @@
 .EfficompsContainerWrapper {
     margin: 0 0 0 0;
     padding: 0 0 0 0;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
     border: 0;
-    position: relative;
-    background: rgb(240, 240, 240);
+    position: absolute;
+    background: #f9f3ff;
+}
+
+.EfficompsContainerLeftColumnFirstLoad {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-right: 1px inset #ccc;
+    border-top-right-radius: 3px;
+    width: 207px;
+    margin: 0px;
+    z-index: 1000;
 }
 
 .EfficompsContainerLeftColumnHide {
@@ -112,9 +129,22 @@
     bottom: 0;
     border-right: 1px inset #ccc;
     border-top-right-radius: 3px;
-    background: rgb(240, 240, 240);
+    color: #fff;
+    font-weight: bold;
     width: 45px;
-    margin: 0px;
+    margin-left: 0px;
+    z-index: 1001;
+    animation: mymoveIn 0.5s 0s;
+}
+
+@keyframes mymoveIn {
+    from {
+        width: 207px;
+    }
+
+    to {
+        width: 45px;
+    }
 }
 
 .EfficompsContainerLeftColumnUnhide, .EfficompsContainerLeftColumnHideHover {
@@ -123,43 +153,277 @@
     bottom: 0;
     border-right: 1px inset #ccc;
     border-top-right-radius: 3px;
-    background: rgb(240, 240, 240);
-    width: 200px;
+    width: 207px;
     margin: 0px;
-    z-index:1000;
+    z-index: 1000;
+    animation: mymoveOut 0.5s 0s;
 }
 
-.EfficompsContainerContentColumn, .EfficompsContainerContentColumnWider {
-    background: rgb(240, 240, 240);
-    border: 1px inset #ccc;
+@keyframes mymoveOut {
+    from {
+        width: 45px;
+    }
+
+    to {
+        width: 207px;
+    }
+}
+
+.EfficompsContainerLeftColumnUnhide, .EfficompsContainerLeftColumnHideHover, .EfficompsContainerLeftColumnFirstLoad, .EfficompsContainerLeftColumnHide {
+    background: #005db6;
+}
+
+.EfficompsContainerContentColumn, .EfficompsContainerContentColumnWider, .EfficompsContainerContentColumnFirstLoad {
+    background: #f9f3ff;
+    padding-left: 2px;
+}
+
+.EfficompsContainerContentColumnFirstLoad {
+    margin-left: 208px;
 }
 
 .EfficompsContainerContentColumn {
     margin-left: 208px;
+    animation: contentOut 0.5s 0s;
+}
+
+@keyframes contentOut {
+    from {
+        margin-left: 45px;
+    }
+
+    to {
+        margin-left: 208px;
+    }
 }
 
 .EfficompsContainerContentColumnWider {
     margin-left: 45px;
+    animation: contentIn 0.5s 0s;
+}
+
+@keyframes contentIn {
+    from {
+        margin-left: 208px;
+    }
+
+    to {
+        margin-left: 45px;
+    }
 }
 
 .EfficompsLeftColumnToggleButton {
     position: absolute;
     top: 1px;
-    right: 2px;
+    left: 2px;
     height: 40px;
     width: 40px;
+    animation: toggleButtonIn 0.5s 0s;
+    z-index: 1001;
+}
+
+@keyframes toggleButtonIn {
+    from {
+        left: 164px;
+    }
+
+    to {
+        left: 2px;
+    }
+}
+
+.EfficompsLeftColumnToggleButtonUnhide {
+    position: absolute;
+    top: 1px;
+    left: 164px;
+    height: 40px;
+    width: 40px;
+    animation: toggleButtonOut 0.5s 0s;
+    z-index: 1001;
+}
+
+@keyframes toggleButtonOut {
+    from {
+        left: 2px;
+    }
+
+    to {
+        left: 164px;
+    }
+}
+
+.EfficompsLeftColumnToggleButton, .EfficompsLeftColumnToggleButtonUnhide {
+    background-color: #6ffe3f;
     border-radius: 3px;
-    border: 1px solid #e1dada;
-    background-color: #e7f5ff;
-    z-index:1001;
+    border: 1px outset #f9f3ff;
 }
 
-.EfficompsLeftColumnToggleButton:hover {
+.EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
     cursor: pointer;
-    background-color: aliceblue;
+    background-color: limegreen;
 }
 
-.EfficompsLeftColumnMenuContainer{
-    margin-top:44px;
-    padding-left:4px;
+.EfficompsLeftColumnMenuContainerFirstLoad, .EfficompsLeftColumnMenuContainerUnhide {
+    position: absolute;
+    left: 0;
+    margin-top: 44px;
+    z-index: 1002;
+    width: 207px;
+    border-radius: 2px;
+    text-indent: 2px;
+    line-height: 2.5px;
+    animation: menuContainerOut 0.5s 0s;
+}
+
+@keyframes menuContainerOut {
+    from {
+        width: 45px;
+    }
+
+    to {
+        width: 207px;
+    }
+}
+
+.EfficompsLeftColumnMenuContainerFirstLoad a, .EfficompsLeftColumnMenuContainerUnhide a {
+    border-bottom: 1px inset #4c626d;
+    width: 100%;
+    float: left;
+    width: 203px;
+    color: #f5f0f0;
+    margin-left: 1px;
+    margin-right: 1px;
+    animation: menuContainerOutA 0.5s 0s;
+}
+
+@keyframes menuContainerOutA {
+    from {
+        width: 41px;
+    }
+
+    to {
+        width: 203px;
+    }
+}
+
+.EfficompsLeftColumnMenuContainerHide {
+    position: absolute;
+    left: 0;
+    margin-top: 44px;
+    z-index: 1002;
+    width: 45px;
+    color: #f5f0f0;
+    font-weight: bold;
+    text-align: center;
+    line-height: 2.5;
+    animation: menuContainerIn 0.5s 0s;
+}
+
+@keyframes menuContainerIn {
+    from {
+        width: 207px;
+    }
+
+    to {
+        width: 45px;
+    }
+}
+
+.EfficompsLeftColumnMenuContainerHide a {
+    border-bottom: 1px inset #4c626d;
+    width: 100%;
+    float: left;
+    color:#f5f0f0;
+    width: 40px;
+    margin-left: 1px;
+    margin-right: 1px;
+    animation: menuContainerInA 0.5s 0s;
+}
+
+@keyframes menuContainerInA {
+    from {
+        width: 203px;
+    }
+    to {
+        width: 40px;
+    }
+}
+
+.MenuListState, .MenuListStateFirstChildren, .MenuListStateGrandChildren {
+    position: absolute;
+    z-index: 1003;
+    left: 1px;
+    text-indent: 5px;
+    width: 203px;
+    color: #000;
+    line-height: 2.5;
+    border-radius: 2px;
+    font-weight: bold;
+    animation: menuContainerOutA 0.5s 0s;
+}
+
+.MenuListState {
+    height: 42px;
+}
+
+.MenuListState, .MenuListStateFirstChildren, .MenuListStateGrandChildren, .MenuListStateHide {
+    background-color: #ebfb18;
+}
+
+.MenuListStateHide {
+    position: absolute;
+    z-index: 1003;
+    left: 2px;
+    width: 40px;
+    border-radius: 4px;
+    line-height: 2.5;
+    height: 40px;
+    color: #2e025f;
+    font-weight: bold;
+    text-align: center;
+    animation: menuContainerInA 0.5s 0s;
+}
+
+.MenuListStateHide:hover, .MenuListState:hover, .MenuListStateFirstChildren:hover,.MenuListStateGrandChildren:hover {
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #22d414;
+    color: #fff;
+}
+
+.MenuListStateFirstChildren {
+    text-indent: 15px;
+    font-size: smaller;
+    height: 32px;
+    text-decoration: none;
+}
+
+.MenuListStateGrandChildren {
+    text-indent: 30px;
+    font-size: smaller;
+    height: 32px;
+    text-decoration: none;
+}
+
+.EfficompsLeftColumnProgressBarContainer {
+    position: fixed;
+    z-index: 1004;
+    background: rgba(255, 255, 255, 0.05);
+    top: 0;
+    left: 196px;
+    bottom: 0;
+    width: 10px;
+}
+
+.EfficompsLeftColumnProgressBar {
+    top: 0;
+    left: 196px;
+    width: 10px;
+    z-index: 1005;
+    position: absolute;
+    will-change: transform, opacity;
+    background: linear-gradient(to top, violet, red);
+    transform-origin: top center;
+    transform: scale(1, 0);
+    opacity: 0;
 }
