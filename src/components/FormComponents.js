@@ -22,6 +22,30 @@ const FormComponents = ClassAdapter(null, {
     getDirectStyle: function () {
         return this.directStyle || {};
     },
+    getElementPosition: function (elemId) {
+        let offsetLeft = 0;
+        let offsetTop = 0;
+        let offsetTrail = document.getElementById(elemId);
+
+        while (offsetTrail) {
+            offsetLeft += offsetTrail.offsetLeft;
+            offsetTop += offsetTrail.offsetTop;
+            offsetTrail = offsetTrail.offsetParent;
+        }
+        if (navigator.userAgent.indexOf('Mac') !== -1 && typeof document.body.leftMargin !== 'undefined') {
+            offsetLeft += document.body.leftMargin;
+            offsetTop += document.body.topMargin;
+        }
+
+        //It has been noticed that offsetTop if 69 pixels more for IE 6
+        if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+            let ieversion = new Number(RegExp.$1)
+            //if (ieversion=6 && ieversion<7)getClassname            // {
+            //if(offsetTop&gt;78) offsetTop -= 79;
+            //}
+        }
+        return { left: offsetLeft, top: offsetTop };
+    }
 });
 
 const ButtonComponent = ClassAdapter(FormComponents, {

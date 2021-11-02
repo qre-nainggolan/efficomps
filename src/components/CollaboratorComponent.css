@@ -82,11 +82,11 @@ body {
 }
 
 .CollaboratorTable .tbody .trHighlighted {
-float: left;
-width: 100% !important;
-max-width: 100% !important;
-border-bottom: 1px solid #ccc;
-background-color: #e7f5ff;
+    float: left;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-bottom: 1px solid #ccc;
+    background-color: #e7f5ff;
 }
 
 .CollaboratorTable .tbody .trHighlighted .td {
@@ -175,6 +175,10 @@ background-color: #e7f5ff;
 }
 
 .EfficompsContainerContentColumn, .EfficompsContainerContentColumnWider, .EfficompsContainerContentColumnFirstLoad {
+    top: 0;
+    position: absolute;
+    left:0;
+    right:0;
     background: #f9f3ff;
     padding-left: 2px;
 }
@@ -302,10 +306,10 @@ background-color: #e7f5ff;
     border: 1px outset #f9f3ff;
 }
 
-    .EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
-        cursor: pointer;
-        background-color: limegreen;
-    }
+.EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
+    cursor: pointer;
+    background-color: limegreen;
+}
 
 .EfficompsLeftColumnMenuContainerFirstLoad, .EfficompsLeftColumnMenuContainerUnhide {
     position: absolute;
@@ -417,6 +421,7 @@ background-color: #e7f5ff;
 
 .MenuListStateHide {
     position: absolute;
+    top:0;
     z-index: 1003;
     left: 2px;
     width: 40px;
@@ -452,23 +457,60 @@ background-color: #e7f5ff;
 
 .EfficompsLeftColumnProgressBarContainer {
     position: fixed;
-    background: rgba(255, 255, 255, 0.05);
-    top: 0;
+    background-color: #005db6;
+    opacity:0.8;
+    top: 43px;
     left: 196px;
     bottom: 0;
     width: 10px;
+    border-radius:4px;
+    animation: progressBarIn 0.5s 0s;
     z-index: 1011;
 }
 
+.EfficompsLeftColumnProgressBarContainerHide {
+    opacity: 0;
+    left: 0;
+    animation: progressBarOut 0.5s 0s;
+}
+
 .EfficompsLeftColumnProgressBar {
-    top: 200px;
+    top: 45px;
     left: 196px;
     width: 10px;
+    background-color: #ccc;
+    border-radius: 5px;
     position: absolute;
-    will-change: transform, opacity;
-    background: linear-gradient(to top, violet, red);
-    transform-origin: top center;
-    transform: scale(1, 0);
-    opacity: 1.0;
+    height: 30px;
     z-index: 1012;
+    opacity: 0.7`;
+    animation: progressBarIn 0.5s 0s;
+}
+
+@keyframes progressBarIn {
+    from {
+        opacity: 0;
+        left:0;
+    }
+
+    to {
+        opacity: 0.7;
+        left:196px;
+    }
+}
+
+.EfficompsLeftColumnProgressBarHide {
+    opacity: 0;
+    left: 0;
+    animation: progressBarOut 0.5s 0s;
+}
+
+@keyframes progressBarOut {
+    from {
+        opacity: 0.7;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
