@@ -18,88 +18,88 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.CollaboratorTable .thead {
-    width: 100% !important;
-    max-width: 100% !important;
-    background-color: #e6e2ee !important;
-    height: auto;
-    float: left;
-}
+    .CollaboratorTable .thead {
+        width: 100% !important;
+        max-width: 100% !important;
+        background-color: #e6e2ee !important;
+        height: auto;
+        float: left;
+    }
 
-.CollaboratorTable .thead .tr {
-    float: left;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-bottom: 1px solid #ccc;
-    background-color: #e6e2ee;
-    font-weight: bold;
-    border-left: 1px solid #ccc;
-    border-right: 0px solid #88d1fb;
-}
+        .CollaboratorTable .thead .tr {
+            float: left;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-bottom: 1px solid #ccc;
+            background-color: #e6e2ee;
+            font-weight: bold;
+            border-left: 1px solid #ccc;
+            border-right: 0px solid #88d1fb;
+        }
 
-.CollaboratorTable .thead .tr .td {
-    position: relative;
-    float: left;
-    border-right: 1px inset #ccc;
-    line-height: 2.5;
-    padding: 0 1px 0 1.5px;
-    margin: 0 1px 0 1.5px;
-}
+            .CollaboratorTable .thead .tr .td {
+                position: relative;
+                float: left;
+                border-right: 1px inset #ccc;
+                line-height: 2.5;
+                padding: 0 1px 0 1.5px;
+                margin: 0 1px 0 1.5px;
+            }
 
-.CollaboratorTable .thead .tr .td:last-child {
-    border-right: 0px solid #ccc;
-}
+                .CollaboratorTable .thead .tr .td:last-child {
+                    border-right: 0px solid #ccc;
+                }
 
-.CollaboratorTable .thead .tr .td .HeaderSortingSign:hover {
-    cursor: pointer;
-    color: limegreen;
-}
+                .CollaboratorTable .thead .tr .td .HeaderSortingSign:hover {
+                    cursor: pointer;
+                    color: limegreen;
+                }
 
-.CollaboratorTable .tbody {
-    width: 100% !important;
-    max-width: 100% !important;
-    border-left: 1px solid #ccc;
-    overflow-y: scroll;
-}
+    .CollaboratorTable .tbody {
+        width: 100% !important;
+        max-width: 100% !important;
+        border-left: 1px solid #ccc;
+        overflow-y: scroll;
+    }
 
-.CollaboratorTable .tbody .tr, .CollaboratorTable .tbody .trNormal {
-    float: left;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-bottom: 1px solid #ccc;
-}
+        .CollaboratorTable .tbody .tr, .CollaboratorTable .tbody .trNormal {
+            float: left;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-bottom: 1px solid #ccc;
+        }
 
-.CollaboratorTable .tbody .tr .td, .CollaboratorTable .tbody .trNormal .td {
-    float: left;
-    border-right: 0px inset #ccc;
-    line-height: 2;
-    padding: 0 1px 0 1.5px;
-    margin: 0 1px 0 1.5px;
-}
+            .CollaboratorTable .tbody .tr .td, .CollaboratorTable .tbody .trNormal .td {
+                float: left;
+                border-right: 0px inset #ccc;
+                line-height: 2;
+                padding: 0 1px 0 1.5px;
+                margin: 0 1px 0 1.5px;
+            }
 
-.CollaboratorTable .tbody .tr:hover, .CollaboratorTable .tbody .trNormal:hover {
-    background-color: #e7f5ff !important;
-}
+            .CollaboratorTable .tbody .tr:hover, .CollaboratorTable .tbody .trNormal:hover {
+                background-color: #e7f5ff !important;
+            }
 
-.CollaboratorTable .tbody .trHighlighted {
-    float: left;
-    width: 100% !important;
-    max-width: 100% !important;
-    border-bottom: 1px solid #ccc;
-    background-color: #e7f5ff;
-}
+        .CollaboratorTable .tbody .trHighlighted {
+            float: left;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-bottom: 1px solid #ccc;
+            background-color: #e7f5ff;
+        }
 
-.CollaboratorTable .tbody .trHighlighted .td {
-    float: left;
-    line-height: 2;
-    border-right: 0px inset #ccc;
-    padding: 0 1px 0 1.5px;
-    margin: 0 1px 0 1.5px;
-}
+            .CollaboratorTable .tbody .trHighlighted .td {
+                float: left;
+                line-height: 2;
+                border-right: 0px inset #ccc;
+                padding: 0 1px 0 1.5px;
+                margin: 0 1px 0 1.5px;
+            }
 
-.CollaboratorTable .tbody .trHighlighted:hover {
-    background-color: #e7f5ff !important;
-}
+            .CollaboratorTable .tbody .trHighlighted:hover {
+                background-color: #e7f5ff !important;
+            }
 
 .EfficompsContainerWrapper {
     margin: 0 0 0 0;
@@ -177,8 +177,8 @@ body {
 .EfficompsContainerContentColumn, .EfficompsContainerContentColumnWider, .EfficompsContainerContentColumnFirstLoad {
     top: 0;
     position: absolute;
-    left:0;
-    right:0;
+    left: 0;
+    right: 0;
     background: #f9f3ff;
     padding-left: 2px;
 }
@@ -306,10 +306,10 @@ body {
     border: 1px outset #f9f3ff;
 }
 
-.EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
-    cursor: pointer;
-    background-color: limegreen;
-}
+    .EfficompsLeftColumnToggleButton:hover, .EfficompsLeftColumnToggleButtonUnhide:hover {
+        cursor: pointer;
+        background-color: limegreen;
+    }
 
 .EfficompsLeftColumnMenuContainerFirstLoad, .EfficompsLeftColumnMenuContainerUnhide {
     position: absolute;
@@ -421,7 +421,7 @@ body {
 
 .MenuListStateHide {
     position: absolute;
-    top:0;
+    top: 0;
     z-index: 1003;
     left: 2px;
     width: 40px;
@@ -434,12 +434,12 @@ body {
     animation: menuContainerInA 0.5s 0s;
 }
 
-.MenuListStateHide:hover, .MenuListState:hover, .MenuListStateFirstChildren:hover, .MenuListStateGrandChildren:hover {
-    cursor: pointer;
-    text-decoration: none;
-    background-color: #22d414;
-    color: #fff;
-}
+    .MenuListStateHide:hover, .MenuListState:hover, .MenuListStateFirstChildren:hover, .MenuListStateGrandChildren:hover {
+        cursor: pointer;
+        text-decoration: none;
+        background-color: #22d414;
+        color: #fff;
+    }
 
 .MenuListStateFirstChildren {
     text-indent: 15px;
@@ -458,12 +458,12 @@ body {
 .EfficompsLeftColumnProgressBarContainer {
     position: fixed;
     background-color: #005db6;
-    opacity:0.8;
+    opacity: 0.8;
     top: 43px;
     left: 196px;
     bottom: 0;
     width: 10px;
-    border-radius:4px;
+    border-radius: 4px;
     animation: progressBarIn 0.5s 0s;
     z-index: 1011;
 }
@@ -478,7 +478,7 @@ body {
     top: 45px;
     left: 196px;
     width: 10px;
-    background-color: #ccc;
+    background-color: #6e6df5;
     border-radius: 5px;
     position: absolute;
     height: 30px;
@@ -490,12 +490,12 @@ body {
 @keyframes progressBarIn {
     from {
         opacity: 0;
-        left:0;
+        left: 0;
     }
 
     to {
         opacity: 0.7;
-        left:196px;
+        left: 196px;
     }
 }
 

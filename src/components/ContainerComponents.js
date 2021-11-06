@@ -64,10 +64,17 @@ const ContainerWrapper = ClassAdapter(null, {
         const [progressBarClassnameState, setProgressBarClassnameState] = useState("EfficompsLeftColumnProgressBar");
         const [progressBarContainerClassnameState, setProgressBarContainerClassnameState] = useState("EfficompsLeftColumnProgressBarContainer");
 
-        const [menuListState, setMenuListState] = useState(this.leftColumn);
-        const [heightOfLeftColumnState, setHeightOfLeftColumnState] = useState(0)
+        const [progressBarMovementPositionState, setProgressBarMovementPositionState] = useState(0);
+        const [progressBarMovementCounterState, setProgressBarMovementCounterState] = useState(0);
 
-        let progressBarHeight = parseInt(this.browserCanvasHeight) - 44;
+        const [menuListState, setMenuListState] = useState(this.leftColumn);
+        const [heightOfLeftColumnState, setHeightOfLeftColumnState] = useState(0);
+        const [scaleOfProgressBarWithMenuHeightState, setScaleOfProgressBarWithMenuHeightState] = useState(0)
+        const [marginEveryMoveDownState, setMarginEveryMoveDownState] = useState(0);
+
+        const [progressBarHeightState, setProgressBarHeightState] = useState(0)
+
+        let progressBarContainerHeight = parseInt(this.browserCanvasHeight) - 44;
 
         const [scrollPositionState, setScrollPositionState] = useState(0);
 
@@ -96,9 +103,24 @@ const ContainerWrapper = ClassAdapter(null, {
         useEffect(() => {
             let currentLeftMenuHeight = getLength();
             if (this.browserCanvasHeight > currentLeftMenuHeight) {
-                setHeightOfLeftColumnState(this.browserCanvasHeight);
+                setHeightOfLeftColumnState(this.browserCanvasHeight - 44);
+                setProgressBarHeightState((currentLeftMenuHeight > progressBarContainerHeight) ? scaleOfProgressBarWithMenuHeightState * progressBarContainerHeight : progressBarContainerHeight);
             } else {
                 setHeightOfLeftColumnState(currentLeftMenuHeight + 44);
+
+                let currentLeftMenuHeightTemp = currentLeftMenuHeight + 44;
+
+                setScaleOfProgressBarWithMenuHeightState(parseFloat(progressBarContainerHeight / currentLeftMenuHeightTemp));
+
+                let scaleTemp = parseFloat(progressBarContainerHeight / currentLeftMenuHeightTemp);
+                setProgressBarHeightState((currentLeftMenuHeightTemp > progressBarContainerHeight) ? scaleTemp * progressBarContainerHeight : progressBarContainerHeight);
+
+                let progressBarHeightStateTemp = (currentLeftMenuHeightTemp > progressBarContainerHeight) ? scaleTemp * progressBarContainerHeight : progressBarContainerHeight;
+                let marginEveryMoveDownStateTemp = 10 / (progressBarContainerHeight - progressBarHeightStateTemp) * (currentLeftMenuHeightTemp - progressBarContainerHeight);
+                setMarginEveryMoveDownState(marginEveryMoveDownStateTemp);
+
+                setScrollPositionState(marginEveryMoveDownStateTemp * progressBarMovementCounterState * -1);
+                
             }
         }, [menuListState]);
 
@@ -111,7 +133,7 @@ const ContainerWrapper = ClassAdapter(null, {
                         timer = setTimeout(() => {
                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHideHover");
                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButtonUnhide");
-                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad")
+                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPad");
                             setContentColumnClassnameState("EfficompsContainerContentColumn");
                             setProgressBarClassnameState("EfficompsLeftColumnProgressBar");
                             setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainer");
@@ -124,10 +146,10 @@ const ContainerWrapper = ClassAdapter(null, {
                         timer = setTimeout(() => {
                             setLeftColumnClassnameState("EfficompsContainerLeftColumnHide");
                             setToggleButtonClassnameState("EfficompsLeftColumnToggleButton");
-                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide")
+                            setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                             setContentColumnClassnameState("EfficompsContainerContentColumnWider");
                             setProgressBarClassnameState("EfficompsLeftColumnProgressBarHide");
-                            setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainerHide")
+                            setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainerHide") 
                         }, 250)
                     }
                     break;
@@ -135,20 +157,23 @@ const ContainerWrapper = ClassAdapter(null, {
         }
 
         const executeMouseWheel = (e) => {
-            // Wheel up will make deltaY as positive number, wheel up will make deltaY as negative number
-            if (this.browserCanvasHeight < heightOfLeftColumnState || scrollPositionState !== 0) {
+            if (this.browserCanvasHeight < heightOfLeftColumnState || progressBarMovementPositionState > 0)
+            {
+                if (e.deltaY > 0) {
+                    if (progressBarMovementPositionState < progressBarContainerHeight - progressBarHeightState) {
+                        setScrollPositionState(scrollPositionState - marginEveryMoveDownState);
+                        setProgressBarMovementPositionState(progressBarMovementPositionState + 10)
+                        setProgressBarMovementCounterState(progressBarMovementCounterState + 1);
+                    }
+                }
                 if (e.deltaY < 0) {
-                    // console.log("atas");
-                    if (scrollPositionState < 0)
-                        setScrollPositionState(scrollPositionState + ((e.deltaY * 10) / (parseFloat(heightOfLeftColumnState / -30) * parseFloat(heightOfLeftColumnState / progressBarHeight))));
-                    else
-                        setScrollPositionState(0);
-                } else {
-                    console.log("bawah , " + scrollPositionState + ", " + heightOfLeftColumnState + ", " + parseFloat(heightOfLeftColumnState / -30) + ", " + progressBarHeight);
-                    if ((scrollPositionState * -1) < (progressBarHeight - 30))
-                        setScrollPositionState(scrollPositionState + ((e.deltaY * 10) / (parseFloat(heightOfLeftColumnState / -30) * parseFloat(heightOfLeftColumnState / progressBarHeight))));
-                    else {
-                        setScrollPositionState((progressBarHeight - 30) * -1);
+
+                    if (progressBarMovementPositionState > 0) {
+                        setScrollPositionState(scrollPositionState + marginEveryMoveDownState);
+                        setProgressBarMovementPositionState(progressBarMovementPositionState - 10)
+                        setProgressBarMovementCounterState(progressBarMovementCounterState - 1);
+                    } else {
+                        setScrollPositionState(0)
                     }
                 }
             }
@@ -158,18 +183,21 @@ const ContainerWrapper = ClassAdapter(null, {
             <div
                 className="EfficompsContainerWrapper"
                 name={"EfficompsContainerWrapper_" + this.getName()}
-                style={{ height: this.browserCanvasHeight + 'px', overflowY: 'hidden' }}
+                style={{
+                    height: this.browserCanvasHeight + 'px',
+                    overflowY: 'hidden'
+                }}
             >
                 <div
                     className={progressBarContainerClassnameState}
                     style={{
-                        height: leftColumnClassnameState === "EfficompsContainerLeftColumnHide" ? (this.browserCanvasHeight) : (heightOfLeftColumnState)
+                        height: progressBarContainerHeight + 'px'
                     }}
                 >
                 </div>
                 <div
                     className={progressBarClassnameState}
-                    style={{ marginTop: (scrollPositionState * -1) + 'px' }}
+                    style={{ marginTop: progressBarMovementPositionState + 'px', height: progressBarHeightState + 'px' }}
                 ></div>
                 <div
                     className={leftColumnClassnameState}
@@ -226,7 +254,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                 <div
                                     className="MenuListStateHide"
                                     key={"menuListState2_" + j}
-                                    style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + 'px'), overflowY: 'hidden' }}
+                                    style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + scrollPositionState + 'px'), overflowY: 'hidden' }}
                                     onMouseEnter={executeSwap}
                                     onMouseOut={executeSwap}
                                     onWheel={executeMouseWheel}
