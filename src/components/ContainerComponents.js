@@ -102,13 +102,14 @@ const ContainerWrapper = ClassAdapter(null, {
 
         useEffect(() => {
             let currentLeftMenuHeight = getLength();
+            console.log(currentLeftMenuHeight);
             if (this.browserCanvasHeight > currentLeftMenuHeight) {
                 setHeightOfLeftColumnState(this.browserCanvasHeight - 44);
                 setProgressBarHeightState((currentLeftMenuHeight > progressBarContainerHeight) ? scaleOfProgressBarWithMenuHeightState * progressBarContainerHeight : progressBarContainerHeight);
             } else {
-                setHeightOfLeftColumnState(currentLeftMenuHeight + 44);
+                setHeightOfLeftColumnState(currentLeftMenuHeight);
 
-                let currentLeftMenuHeightTemp = currentLeftMenuHeight + 44;
+                let currentLeftMenuHeightTemp = currentLeftMenuHeight;
 
                 setScaleOfProgressBarWithMenuHeightState(parseFloat(progressBarContainerHeight / currentLeftMenuHeightTemp));
 
@@ -138,6 +139,10 @@ const ContainerWrapper = ClassAdapter(null, {
                             setProgressBarClassnameState("EfficompsLeftColumnProgressBar");
                             setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainer");
                         }, 250);
+                    } 
+                    if (leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" || leftColumnClassnameState === "EfficompsContainerLeftColumnFirstLoad") {
+                        setProgressBarClassnameState("EfficompsLeftColumnProgressBar");
+                        setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainer")
                     }
                     break
                 case "mouseout":
@@ -149,8 +154,12 @@ const ContainerWrapper = ClassAdapter(null, {
                             setToggleButtonPadClassnameState("EfficompsLeftColumnToggleButtonPadHide");
                             setContentColumnClassnameState("EfficompsContainerContentColumnWider");
                             setProgressBarClassnameState("EfficompsLeftColumnProgressBarHide");
-                            setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainerHide") 
+                            setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainerHide")
                         }, 250)
+                    }
+                    if (leftColumnClassnameState === "EfficompsContainerLeftColumnUnhide" || leftColumnClassnameState === "EfficompsContainerLeftColumnFirstLoad") {
+                        setProgressBarClassnameState("EfficompsLeftColumnProgressBarHide");
+                        setProgressBarContainerClassnameState("EfficompsLeftColumnProgressBarContainerHide")
                     }
                     break;
             }
@@ -254,7 +263,7 @@ const ContainerWrapper = ClassAdapter(null, {
                                 <div
                                     className="MenuListStateHide"
                                     key={"menuListState2_" + j}
-                                    style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + scrollPositionState + 'px'), overflowY: 'hidden' }}
+                                    style={{ marginTop: (this.setAndGetMarginTop(initialMarginTop) + 'px'), overflowY: 'hidden' }}
                                     onMouseEnter={executeSwap}
                                     onMouseOut={executeSwap}
                                     onWheel={executeMouseWheel}
