@@ -99,4 +99,5 @@ To build left navigation on layout, Menu items are specified in JSON format to m
 
 
 
-![Weighbridge_FE - Google Chrome 2021-11-07 09-44-56](https://user-images.githubusercontent.com/940036/140630445-11eaab03-0ae8-4f3a-931c-4e6ba5aa2a3a.gif)
+![Weighbridge_FE - Google Chrome 2021-11-07 23-37-05](https://user-images.githubusercontent.com/940036/140653723-4019a4fb-e5c6-48de-95fe-1ccc8a306d97.gif)
+

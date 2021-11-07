@@ -61,8 +61,8 @@ const ContainerWrapper = ClassAdapter(null, {
         const [contentColumnClassnameState, setContentColumnClassnameState] = useState("EfficompsContainerContentColumnFirstLoad");
         const [toggleButtonClassnameState, setToggleButtonClassnameState] = useState("EfficompsLeftColumnToggleButtonUnhide");
 
-        const [progressBarClassnameState, setProgressBarClassnameState] = useState("EfficompsLeftColumnProgressBar");
-        const [progressBarContainerClassnameState, setProgressBarContainerClassnameState] = useState("EfficompsLeftColumnProgressBarContainer");
+        const [progressBarClassnameState, setProgressBarClassnameState] = useState("EfficompsLeftColumnProgressBarHide");
+        const [progressBarContainerClassnameState, setProgressBarContainerClassnameState] = useState("EfficompsLeftColumnProgressBarContainerHide");
 
         const [progressBarMovementPositionState, setProgressBarMovementPositionState] = useState(0);
         const [progressBarMovementCounterState, setProgressBarMovementCounterState] = useState(0);
@@ -202,16 +202,20 @@ const ContainerWrapper = ClassAdapter(null, {
                     style={{
                         height: progressBarContainerHeight + 'px'
                     }}
+                    onMouseEnter={executeSwap}
+                    onMouseOut={executeSwap} 
                 >
                 </div>
                 <div
                     className={progressBarClassnameState}
                     style={{ marginTop: progressBarMovementPositionState + 'px', height: progressBarHeightState + 'px' }}
+                    onMouseEnter={executeSwap}
+                    onMouseOut={executeSwap} 
                 ></div>
                 <div
                     className={leftColumnClassnameState}
                     onMouseEnter={executeSwap}
-                    onMouseOut={executeSwap}
+                    onMouseOut={executeSwap} 
                     style={
                         leftColumnClassnameState === "EfficompsContainerLeftColumnHide"
                             ?
